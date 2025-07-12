@@ -3,7 +3,7 @@
 An Augmented Reality web application that displays 3D models when a camera detects specific image targets.
 
 ## ✅ Ready to Use!
-Your Baby.stl model is now hosted on Google Drive and ready for AR display!
+Your Baby.stl model is now hosted directly on GitHub and ready for AR display!
 
 ## Features
 - 📱 Mobile AR support using MindAR
@@ -11,7 +11,7 @@ Your Baby.stl model is now hosted on Google Drive and ready for AR display!
 - 🎨 3D STL model display with rotation animation
 - 🔄 Multiple fallback options for model loading
 - 📊 Real-time debug console
-- ☁️ Cloud-hosted 3D model (Google Drive)
+- ☁️ GitHub-hosted 3D model (reliable and fast)
 
 ## How to Use
 
@@ -25,7 +25,7 @@ Your Baby.stl model is now hosted on Google Drive and ready for AR display!
 ## Setup Instructions (Already Complete!)
 
 ### ✅ STL File Hosting
-Your `Baby.stl` file is now hosted on Google Drive and configured in the app.
+Your `Baby.stl` file is now hosted directly on GitHub and configured in the app.
 
 #### Option A: GitHub Releases (Recommended)
 1. Go to your GitHub repository
