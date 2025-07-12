@@ -11,6 +11,9 @@
   <body style="margin : 0; overflow: hidden;">
     <div id="ar-status" style="position:fixed;top:10px;left:10px;z-index:10;background:#fff;padding:10px;border-radius:5px;display:none;">
       <span id="ar-message"></span>
+      <br>
+      <button onclick="switchToGoogleDrive()" style="margin-top:5px;padding:5px;">Try Google Drive Model</button>
+      <button onclick="switchToTestModel()" style="margin-top:5px;padding:5px;">Use Test Model</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -19,9 +22,13 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- Baby STL model with multiple URL attempts -->
-        <a-asset-item id="babyModel" src="https://drive.google.com/uc?id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV&export=download"></a-asset-item>
+        <!-- Test with working STL first, then try Google Drive -->
+        <a-asset-item id="babyModel" src="https://threejs.org/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
+        <!-- Your Google Drive STL as backup -->
+        <a-asset-item id="googleDriveModel" src="https://drive.google.com/uc?id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV&export=download"></a-asset-item>
+        <!-- Reliable backup STL models -->
         <a-asset-item id="fallbackModel" src="https://threejs.org/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
+        <a-asset-item id="testModel" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -121,6 +128,25 @@
           babyEntity.setAttribute('material', 'color: #FFB6C1');
           babyEntity.removeAttribute('src');
           console.log('🔄 Switched to fallback box model');
+        }
+      }
+
+      // Manual model switching functions for testing
+      function switchToGoogleDrive() {
+        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
+        if (babyEntity) {
+          babyEntity.setAttribute('src', '#googleDriveModel');
+          console.log('🔄 Manually switched to Google Drive model');
+          messageSpan.textContent = 'Trying Google Drive model...';
+        }
+      }
+
+      function switchToTestModel() {
+        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
+        if (babyEntity) {
+          babyEntity.setAttribute('src', '#babyModel');
+          console.log('🔄 Manually switched to test model');
+          messageSpan.textContent = 'Using reliable test model...';
         }
       }
     </script>
