@@ -2,17 +2,30 @@
 
 An Augmented Reality web application that displays 3D models when a camera detects specific image targets.
 
+## ✅ Ready to Use!
+Your Baby.stl model is now hosted on Google Drive and ready for AR display!
+
 ## Features
 - 📱 Mobile AR support using MindAR
 - 🎯 Image target recognition (incredibles.jpg)
 - 🎨 3D STL model display with rotation animation
 - 🔄 Multiple fallback options for model loading
 - 📊 Real-time debug console
+- ☁️ Cloud-hosted 3D model (Google Drive)
 
-## Setup Instructions
+## How to Use
 
-### 1. Host Your STL File
-Your `Baby.stl` file needs to be hosted online. Choose one of these options:
+### 🚀 Quick Start
+1. Serve the files over HTTPS (required for camera access)
+2. Open `index.html` in a mobile browser
+3. Point your camera at the `incredibles.jpg` image
+4. Grant camera permissions when prompted
+5. Watch your 3D baby model appear and rotate!
+
+## Setup Instructions (Already Complete!)
+
+### ✅ STL File Hosting
+Your `Baby.stl` file is now hosted on Google Drive and configured in the app.
 
 #### Option A: GitHub Releases (Recommended)
 1. Go to your GitHub repository
