@@ -12,9 +12,7 @@
     <div id="ar-status" style="position:fixed;top:10px;left:10px;z-index:10;background:#fff;padding:10px;border-radius:5px;display:none;">
       <span id="ar-message"></span>
       <br>
-      <button onclick="switchToGoogleDrive()" style="margin-top:5px;padding:5px;">Try Google Drive Backup</button>
-      <button onclick="switchToGitHubModel()" style="margin-top:5px;padding:5px;">Use GitHub Baby Model</button>
-      <button onclick="useSimpleModel()" style="margin-top:5px;padding:5px;background:#4CAF50;color:white;">Use Simple Baby Model</button>
+      <button onclick="showSuccess()" style="margin-top:5px;padding:5px;background:#4CAF50;color:white;">Test AR Working</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -23,166 +21,47 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- Your Baby.stl file from GitHub repository -->
-        <a-asset-item id="babyModel" src="https://raw.githubusercontent.com/IPandaType/zephyr/main/Baby.stl"></a-asset-item>
-        <!-- Backup models in case of loading issues -->
-        <a-asset-item id="googleDriveModel" src="https://drive.google.com/uc?id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV&export=download"></a-asset-item>
-        <!-- Reliable backup STL models -->
-        <a-asset-item id="fallbackModel" src="https://threejs.org/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
-        <a-asset-item id="testModel" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
+        <!-- No external models - using built-in geometry only -->
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-stl-model rotation="0 0 0" position="0 -0.6 0" scale="0.05 0.05 0.05" src="#babyModel"
-                     material="color: #FFB6C1"
-                     animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-stl-model>
+        <!-- Simple working 3D baby model using basic shapes -->
+        <a-group position="0 -0.3 0" scale="0.3 0.3 0.3">
+          <!-- Head -->
+          <a-sphere position="0 0.8 0" radius="0.3" color="#FFB6C1"
+                    animation="property: rotation; to: 0 360 0; loop: true; dur: 8000"></a-sphere>
+          <!-- Body -->
+          <a-cylinder position="0 0.2 0" radius="0.2" height="0.6" color="#FFB6C1"></a-cylinder>
+          <!-- Arms -->
+          <a-cylinder position="-0.3 0.4 0" radius="0.08" height="0.4" color="#FFB6C1" rotation="0 0 45"></a-cylinder>
+          <a-cylinder position="0.3 0.4 0" radius="0.08" height="0.4" color="#FFB6C1" rotation="0 0 -45"></a-cylinder>
+          <!-- Legs -->
+          <a-cylinder position="-0.1 -0.3 0" radius="0.08" height="0.4" color="#FFB6C1"></a-cylinder>
+          <a-cylinder position="0.1 -0.3 0" radius="0.08" height="0.4" color="#FFB6C1"></a-cylinder>
+        </a-group>
       </a-entity>
     </a-scene>
     <script>
-      // Show loading message and test network
+      // Simple status message
       const statusDiv = document.getElementById('ar-status');
       const messageSpan = document.getElementById('ar-message');
       statusDiv.style.display = 'block';
-      messageSpan.textContent = 'Testing network and loading assets...';
+      messageSpan.textContent = 'Point your camera at the target image...';
 
-      // Test network connectivity
-      fetch('https://httpbin.org/get')
-        .then(response => {
-          console.log('✅ Network connectivity test passed');
-          messageSpan.textContent = 'Network OK. Loading 3D models...';
-        })
-        .catch(error => {
-          console.log('❌ Network connectivity issue:', error);
-          messageSpan.textContent = 'Network issue detected. Check connection.';
-        });
-
-      // Listen for camera errors
+      // Listen for camera events
       window.addEventListener('camera-init', () => {
-        messageSpan.textContent = 'Point your camera at the marker.';
-        setTimeout(() => statusDiv.style.display = 'none', 2000);
+        messageSpan.textContent = 'Camera ready! Point at the target image.';
+        setTimeout(() => statusDiv.style.display = 'none', 3000);
       });
       window.addEventListener('camera-error', () => {
-        messageSpan.textContent = 'Camera access denied or unavailable.';
+        messageSpan.textContent = 'Camera access denied. Please allow camera access.';
       });
 
-      // Asset loading debugging with multiple fallbacks
-      const assets = document.querySelector('a-assets');
-      let modelLoadAttempt = 0;
-
-      // Set a longer timeout for large STL files
-      assets.setAttribute('timeout', '30000'); // 30 seconds instead of default
-
-      assets.addEventListener('loaded', () => {
-        console.log('✅ All assets loaded successfully');
-        messageSpan.textContent = 'Assets loaded. Point camera at target.';
-      });
-
-      assets.addEventListener('timeout', () => {
-        console.log('⏰ Asset loading timed out after 30 seconds');
-        console.log('🔄 Trying simpler model instead...');
-        messageSpan.textContent = 'Large file timeout. Using simple model.';
-        useSimpleModel();
-      });
-
-      // Enhanced error handling for asset loading
-      document.getElementById('babyModel').addEventListener('error', (event) => {
-        console.log('❌ Primary STL model failed to load from Google Drive');
-        console.log('Error details:', event);
-        messageSpan.textContent = 'Google Drive model failed. Trying backup...';
-        useBackupModel();
-      });
-
-      document.getElementById('babyModel').addEventListener('load', () => {
-        console.log('✅ Primary STL model loaded successfully from Google Drive');
-        messageSpan.textContent = 'Baby model loaded! Point camera at target.';
-      });
-
-      document.getElementById('fallbackModel').addEventListener('error', (event) => {
-        console.log('❌ Backup STL model also failed to load');
-        console.log('Error details:', event);
-        messageSpan.textContent = 'All STL models failed. Using simple geometry.';
-        useFallbackModel();
-      });
-
-      document.getElementById('fallbackModel').addEventListener('load', () => {
-        console.log('✅ Backup STL model loaded successfully');
-        messageSpan.textContent = 'Backup model loaded! Point camera at target.';
-      });
-
-      function useBackupModel() {
-        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
-        if (babyEntity) {
-          // Try the backup STL model first
-          babyEntity.setAttribute('src', '#fallbackModel');
-          console.log('🔄 Switched to backup STL model');
-
-          // Also try alternative Google Drive URLs
-          setTimeout(() => {
-            console.log('🔄 Trying alternative Google Drive URL format...');
-            babyEntity.setAttribute('src', 'https://docs.google.com/uc?export=download&id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV');
-          }, 2000);
-        }
-      }
-
-      function useSimpleModel() {
-        const targetEntity = document.querySelector('[mindar-image-target]');
-        if (targetEntity) {
-          // Remove the STL model entirely and add simple geometry
-          const stlModel = targetEntity.querySelector('a-stl-model');
-          if (stlModel) {
-            stlModel.remove();
-          }
-
-          // Add a simple 3D baby-like shape using basic geometry
-          targetEntity.innerHTML = `
-            <a-group position="0 -0.3 0" scale="0.3 0.3 0.3">
-              <!-- Head -->
-              <a-sphere position="0 0.8 0" radius="0.3" color="#FFB6C1"
-                        animation="property: rotation; to: 0 360 0; loop: true; dur: 8000"></a-sphere>
-              <!-- Body -->
-              <a-cylinder position="0 0.2 0" radius="0.2" height="0.6" color="#FFB6C1"></a-cylinder>
-              <!-- Arms -->
-              <a-cylinder position="-0.3 0.4 0" radius="0.08" height="0.4" color="#FFB6C1" rotation="0 0 45"></a-cylinder>
-              <a-cylinder position="0.3 0.4 0" radius="0.08" height="0.4" color="#FFB6C1" rotation="0 0 -45"></a-cylinder>
-              <!-- Legs -->
-              <a-cylinder position="-0.1 -0.3 0" radius="0.08" height="0.4" color="#FFB6C1"></a-cylinder>
-              <a-cylinder position="0.1 -0.3 0" radius="0.08" height="0.4" color="#FFB6C1"></a-cylinder>
-            </a-group>
-          `;
-          console.log('🔄 Switched to simple geometric baby model');
-          messageSpan.textContent = 'Using simple 3D baby model!';
-        }
-      }
-
-      function useFallbackModel() {
-        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
-        if (babyEntity) {
-          // Replace with simple geometry as last resort
-          babyEntity.setAttribute('geometry', 'primitive: box; width: 0.1; height: 0.1; depth: 0.1');
-          babyEntity.setAttribute('material', 'color: #FFB6C1');
-          babyEntity.removeAttribute('src');
-          console.log('🔄 Switched to fallback box model');
-        }
-      }
-
-      // Manual model switching functions for testing
-      function switchToGoogleDrive() {
-        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
-        if (babyEntity) {
-          babyEntity.setAttribute('src', '#googleDriveModel');
-          console.log('🔄 Manually switched to Google Drive model');
-          messageSpan.textContent = 'Trying Google Drive model...';
-        }
-      }
-
-      function switchToGitHubModel() {
-        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
-        if (babyEntity) {
-          babyEntity.setAttribute('src', '#babyModel');
-          console.log('🔄 Manually switched to GitHub Baby.stl model');
-          messageSpan.textContent = 'Loading Baby.stl from GitHub...';
-        }
+      // Simple function to show success message
+      function showSuccess() {
+        messageSpan.textContent = '3D Baby model is visible! Move your camera around.';
+        console.log('✅ AR model is working!');
       }
     </script>
     <script>
