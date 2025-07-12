@@ -14,6 +14,7 @@
       <br>
       <button onclick="switchToGoogleDrive()" style="margin-top:5px;padding:5px;">Try Google Drive Backup</button>
       <button onclick="switchToGitHubModel()" style="margin-top:5px;padding:5px;">Use GitHub Baby Model</button>
+      <button onclick="useSimpleModel()" style="margin-top:5px;padding:5px;background:#4CAF50;color:white;">Use Simple Baby Model</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -69,15 +70,19 @@
       const assets = document.querySelector('a-assets');
       let modelLoadAttempt = 0;
 
+      // Set a longer timeout for large STL files
+      assets.setAttribute('timeout', '30000'); // 30 seconds instead of default
+
       assets.addEventListener('loaded', () => {
         console.log('✅ All assets loaded successfully');
         messageSpan.textContent = 'Assets loaded. Point camera at target.';
       });
 
       assets.addEventListener('timeout', () => {
-        console.log('⏰ Asset loading timed out');
-        messageSpan.textContent = 'Asset loading failed. Trying fallback.';
-        useFallbackModel();
+        console.log('⏰ Asset loading timed out after 30 seconds');
+        console.log('🔄 Trying simpler model instead...');
+        messageSpan.textContent = 'Large file timeout. Using simple model.';
+        useSimpleModel();
       });
 
       // Enhanced error handling for asset loading
@@ -117,6 +122,36 @@
             console.log('🔄 Trying alternative Google Drive URL format...');
             babyEntity.setAttribute('src', 'https://docs.google.com/uc?export=download&id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV');
           }, 2000);
+        }
+      }
+
+      function useSimpleModel() {
+        const targetEntity = document.querySelector('[mindar-image-target]');
+        if (targetEntity) {
+          // Remove the STL model entirely and add simple geometry
+          const stlModel = targetEntity.querySelector('a-stl-model');
+          if (stlModel) {
+            stlModel.remove();
+          }
+
+          // Add a simple 3D baby-like shape using basic geometry
+          targetEntity.innerHTML = `
+            <a-group position="0 -0.3 0" scale="0.3 0.3 0.3">
+              <!-- Head -->
+              <a-sphere position="0 0.8 0" radius="0.3" color="#FFB6C1"
+                        animation="property: rotation; to: 0 360 0; loop: true; dur: 8000"></a-sphere>
+              <!-- Body -->
+              <a-cylinder position="0 0.2 0" radius="0.2" height="0.6" color="#FFB6C1"></a-cylinder>
+              <!-- Arms -->
+              <a-cylinder position="-0.3 0.4 0" radius="0.08" height="0.4" color="#FFB6C1" rotation="0 0 45"></a-cylinder>
+              <a-cylinder position="0.3 0.4 0" radius="0.08" height="0.4" color="#FFB6C1" rotation="0 0 -45"></a-cylinder>
+              <!-- Legs -->
+              <a-cylinder position="-0.1 -0.3 0" radius="0.08" height="0.4" color="#FFB6C1"></a-cylinder>
+              <a-cylinder position="0.1 -0.3 0" radius="0.08" height="0.4" color="#FFB6C1"></a-cylinder>
+            </a-group>
+          `;
+          console.log('🔄 Switched to simple geometric baby model');
+          messageSpan.textContent = 'Using simple 3D baby model!';
         }
       }
 
