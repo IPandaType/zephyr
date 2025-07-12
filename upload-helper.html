@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STL File Upload Helper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .option {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            transition: border-color 0.3s;
+        }
+        .option:hover {
+            border-color: #4CAF50;
+        }
+        .option h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        .steps {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .steps ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .url-example {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        .recommended {
+            border-color: #4CAF50;
+            background: #f8fff8;
+        }
+        .badge {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 STL File Hosting Setup</h1>
+        <p>Choose one of these options to host your <strong>Baby.stl</strong> file:</p>
+
+        <div class="option recommended">
+            <h3>🏆 Option 1: GitHub Releases <span class="badge">RECOMMENDED</span></h3>
+            <div class="steps">
+                <ol>
+                    <li>Go to your GitHub repository: <strong>https://github.com/IPandaType/zephyr</strong></li>
+                    <li>Click <strong>"Releases"</strong> tab</li>
+                    <li>Click <strong>"Create a new release"</strong></li>
+                    <li>Tag version: <code>v1.0.0</code></li>
+                    <li>Release title: <code>AR Models v1.0.0</code></li>
+                    <li>Drag and drop your <strong>Baby.stl</strong> file to attach it</li>
+                    <li>Click <strong>"Publish release"</strong></li>
+                    <li>Copy the download URL (right-click the file → Copy link)</li>
+                </ol>
+            </div>
+            <div class="url-example">
+                Example URL: https://github.com/IPandaType/zephyr/releases/download/v1.0.0/Baby.stl
+            </div>
+        </div>
+
+        <div class="option">
+            <h3>📁 Option 2: Google Drive</h3>
+            <div class="steps">
+                <ol>
+                    <li>Upload <strong>Baby.stl</strong> to Google Drive</li>
+                    <li>Right-click the file → <strong>"Get link"</strong></li>
+                    <li>Change to <strong>"Anyone with the link"</strong></li>
+                    <li>Copy the link and modify it:</li>
+                </ol>
+                <p><strong>Change from:</strong></p>
+                <div class="url-example">
+                    https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+                </div>
+                <p><strong>To:</strong></p>
+                <div class="url-example">
+                    https://drive.google.com/uc?export=download&id=FILE_ID
+                </div>
+            </div>
+        </div>
+
+        <div class="option">
+            <h3>📦 Option 3: Dropbox</h3>
+            <div class="steps">
+                <ol>
+                    <li>Upload <strong>Baby.stl</strong> to Dropbox</li>
+                    <li>Right-click → <strong>"Copy link"</strong></li>
+                    <li>Change the end of the URL from <code>?dl=0</code> to <code>?dl=1</code></li>
+                </ol>
+            </div>
+            <div class="url-example">
+                Example: https://www.dropbox.com/s/abc123/Baby.stl?dl=1
+            </div>
+        </div>
+
+        <div class="option">
+            <h3>🔧 After Getting Your URL</h3>
+            <div class="steps">
+                <ol>
+                    <li>Copy your hosted STL file URL</li>
+                    <li>Open <strong>index.html</strong> in a text editor</li>
+                    <li>Find line 23 and replace the URL:</li>
+                </ol>
+                <div class="url-example">
+                    &lt;a-asset-item id="babyModel" src="YOUR_URL_HERE"&gt;&lt;/a-asset-item&gt;
+                </div>
+                <ol start="4">
+                    <li>Save the file</li>
+                    <li>Test your AR app!</li>
+                </ol>
+            </div>
+        </div>
+
+        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin-top: 20px;">
+            <strong>💡 Pro Tip:</strong> GitHub Releases is recommended because it's free, reliable, and integrates well with your existing repository!
+        </div>
+    </div>
+</body>
+</html>

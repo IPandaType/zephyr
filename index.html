@@ -19,10 +19,9 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- Using GitHub raw file URL for the STL model -->
-        <!-- You'll need to upload Baby.stl to a file hosting service -->
-        <!-- For now, using a working STL model -->
-        <a-asset-item id="babyModel" src="https://threejs.org/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
+        <!-- Multiple fallback options for the 3D model -->
+        <a-asset-item id="babyModel" src="https://raw.githubusercontent.com/IPandaType/zephyr/main/Baby.stl"></a-asset-item>
+        <a-asset-item id="fallbackModel" src="https://threejs.org/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -48,8 +47,10 @@
         messageSpan.textContent = 'Camera access denied or unavailable.';
       });
 
-      // Asset loading debugging
+      // Asset loading debugging with multiple fallbacks
       const assets = document.querySelector('a-assets');
+      let modelLoadAttempt = 0;
+
       assets.addEventListener('loaded', () => {
         console.log('✅ All assets loaded successfully');
         messageSpan.textContent = 'Assets loaded. Point camera at target.';
@@ -57,15 +58,30 @@
 
       assets.addEventListener('timeout', () => {
         console.log('⏰ Asset loading timed out');
-        messageSpan.textContent = 'Asset loading failed. Using fallback.';
-        // Use fallback model
+        messageSpan.textContent = 'Asset loading failed. Trying fallback.';
         useFallbackModel();
       });
+
+      // Listen for individual asset errors
+      document.getElementById('babyModel').addEventListener('error', () => {
+        console.log('❌ Primary STL model failed to load, trying fallback');
+        messageSpan.textContent = 'Primary model failed. Using backup.';
+        useBackupModel();
+      });
+
+      function useBackupModel() {
+        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
+        if (babyEntity) {
+          // Try the backup STL model first
+          babyEntity.setAttribute('src', '#fallbackModel');
+          console.log('🔄 Switched to backup STL model');
+        }
+      }
 
       function useFallbackModel() {
         const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
         if (babyEntity) {
-          // Replace with simple geometry
+          // Replace with simple geometry as last resort
           babyEntity.setAttribute('geometry', 'primitive: box; width: 0.1; height: 0.1; depth: 0.1');
           babyEntity.setAttribute('material', 'color: #FFB6C1');
           babyEntity.removeAttribute('src');
