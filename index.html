@@ -19,8 +19,8 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- Baby STL model hosted on Google Drive -->
-        <a-asset-item id="babyModel" src="https://drive.google.com/uc?export=download&id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV"></a-asset-item>
+        <!-- Baby STL model with multiple URL attempts -->
+        <a-asset-item id="babyModel" src="https://drive.google.com/uc?id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV&export=download"></a-asset-item>
         <a-asset-item id="fallbackModel" src="https://threejs.org/examples/models/stl/ascii/slotted_disk.stl"></a-asset-item>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
@@ -32,11 +32,22 @@
       </a-entity>
     </a-scene>
     <script>
-      // Show loading message
+      // Show loading message and test network
       const statusDiv = document.getElementById('ar-status');
       const messageSpan = document.getElementById('ar-message');
       statusDiv.style.display = 'block';
-      messageSpan.textContent = 'Requesting camera access...';
+      messageSpan.textContent = 'Testing network and loading assets...';
+
+      // Test network connectivity
+      fetch('https://httpbin.org/get')
+        .then(response => {
+          console.log('✅ Network connectivity test passed');
+          messageSpan.textContent = 'Network OK. Loading 3D models...';
+        })
+        .catch(error => {
+          console.log('❌ Network connectivity issue:', error);
+          messageSpan.textContent = 'Network issue detected. Check connection.';
+        });
 
       // Listen for camera errors
       window.addEventListener('camera-init', () => {
@@ -62,11 +73,29 @@
         useFallbackModel();
       });
 
-      // Listen for individual asset errors
-      document.getElementById('babyModel').addEventListener('error', () => {
-        console.log('❌ Primary STL model failed to load, trying fallback');
-        messageSpan.textContent = 'Primary model failed. Using backup.';
+      // Enhanced error handling for asset loading
+      document.getElementById('babyModel').addEventListener('error', (event) => {
+        console.log('❌ Primary STL model failed to load from Google Drive');
+        console.log('Error details:', event);
+        messageSpan.textContent = 'Google Drive model failed. Trying backup...';
         useBackupModel();
+      });
+
+      document.getElementById('babyModel').addEventListener('load', () => {
+        console.log('✅ Primary STL model loaded successfully from Google Drive');
+        messageSpan.textContent = 'Baby model loaded! Point camera at target.';
+      });
+
+      document.getElementById('fallbackModel').addEventListener('error', (event) => {
+        console.log('❌ Backup STL model also failed to load');
+        console.log('Error details:', event);
+        messageSpan.textContent = 'All STL models failed. Using simple geometry.';
+        useFallbackModel();
+      });
+
+      document.getElementById('fallbackModel').addEventListener('load', () => {
+        console.log('✅ Backup STL model loaded successfully');
+        messageSpan.textContent = 'Backup model loaded! Point camera at target.';
       });
 
       function useBackupModel() {
@@ -75,6 +104,12 @@
           // Try the backup STL model first
           babyEntity.setAttribute('src', '#fallbackModel');
           console.log('🔄 Switched to backup STL model');
+
+          // Also try alternative Google Drive URLs
+          setTimeout(() => {
+            console.log('🔄 Trying alternative Google Drive URL format...');
+            babyEntity.setAttribute('src', 'https://docs.google.com/uc?export=download&id=1d2vVheloO_jJYv5nQfllmotqVFOTymQV');
+          }, 2000);
         }
       }
 
