@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!-- STL Loader for A-Frame -->
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.loaders.min.js"></script>
+    <!-- MindAR for A-Frame -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.css" />
+  </head>
+  <body style="margin : 0; overflow: hidden;">
+    <div id="ar-status" style="position:fixed;top:10px;left:10px;z-index:10;background:#fff;padding:10px;border-radius:5px;display:none;">
+      <span id="ar-message"></span>
+    </div>
+    <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
+    <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
+           color-space="sRGB"
+           renderer="colorManagement: true, physicallyCorrectLights"
+           vr-mode-ui="enabled: false"
+           device-orientation-permission-ui="enabled: true">
+      <a-assets>
+        <a-asset-item id="babyModel" src="Baby.stl"></a-asset-item>
+        <img id="target-image" src="incredibles.jpg" />
+      </a-assets>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-stl-model rotation="0 0 0" position="0 -0.6 0" scale="0.05 0.05 0.05" src="#babyModel"
+                     material="color: #FFB6C1"
+                     animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-stl-model>
+      </a-entity>
+    </a-scene>
+    <script>
+      // Show loading message
+      const statusDiv = document.getElementById('ar-status');
+      const messageSpan = document.getElementById('ar-message');
+      statusDiv.style.display = 'block';
+      messageSpan.textContent = 'Requesting camera access...';
+
+      // Listen for camera errors
+      window.addEventListener('camera-init', () => {
+        messageSpan.textContent = 'Point your camera at the marker.';
+        setTimeout(() => statusDiv.style.display = 'none', 2000);
+      });
+      window.addEventListener('camera-error', () => {
+        messageSpan.textContent = 'Camera access denied or unavailable.';
+      });
+
+      // Asset loading debugging
+      const assets = document.querySelector('a-assets');
+      assets.addEventListener('loaded', () => {
+        console.log('✅ All assets loaded successfully');
+        messageSpan.textContent = 'Assets loaded. Point camera at target.';
+      });
+
+      assets.addEventListener('timeout', () => {
+        console.log('⏰ Asset loading timed out');
+        messageSpan.textContent = 'Asset loading failed. Using fallback.';
+        // Use fallback model
+        useFallbackModel();
+      });
+
+      function useFallbackModel() {
+        const babyEntity = document.querySelector('[mindar-image-target] a-stl-model');
+        if (babyEntity) {
+          // Replace with simple geometry
+          babyEntity.setAttribute('geometry', 'primitive: box; width: 0.1; height: 0.1; depth: 0.1');
+          babyEntity.setAttribute('material', 'color: #FFB6C1');
+          babyEntity.removeAttribute('src');
+          console.log('🔄 Switched to fallback box model');
+        }
+      }
+    </script>
+    <script>
+(function() {
+  var logDiv = document.getElementById('console-log');
+  logDiv.style.display = 'block';
+  function printLog(type, args) {
+    var msg = Array.from(args).map(a => (typeof a === 'object' ? JSON.stringify(a) : a)).join(' ');
+    logDiv.innerHTML += `<div>[${type}] ${msg}</div>`;
+    logDiv.scrollTop = logDiv.scrollHeight;
+  }
+  ['log', 'warn', 'error'].forEach(function(type) {
+    var orig = console[type];
+    console[type] = function() {
+      orig.apply(console, arguments);
+      printLog(type, arguments);
+    };
+  });
+})();
+</script>
+  </body>
+</html><!-- Force update Fri Jul 11 21:27:15 PDT 2025 -->
+<!-- FORCE UPDATE Fri Jul 11 21:36:43 PDT 2025 -->
+<!-- AVOCADO UPDATE Fri Jul 11 21:39:40 PDT 2025 -->
+<!-- AVOCADO BRANCH UPDATE Fri Jul 11 22:19:41 PDT 2025 -->
