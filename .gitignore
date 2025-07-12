@@ -1,4 +1,1 @@
 .idea
-# Large STL files - too big for Git
-*.stl
-Baby.stl
