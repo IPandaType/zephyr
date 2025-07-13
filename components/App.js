@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Find the target images to discover characters!');
+  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
   const [showControls, setShowControls] = useState(true);
   const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
@@ -72,7 +72,7 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('🎮 AR Treasure Hunt! Find the target images to discover characters!');
+        setArMessage('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
         setTimeout(() => setShowControls(false), 5000);
       });
 
@@ -88,17 +88,17 @@ function App() {
             console.log(`🎯 Target ${index} found!`);
 
             if (index === 0) {
-              // Raccoon target
-              setArMessage('🦝 You found the Raccoon! Look for more targets!');
-              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
-            } else if (index === 1) {
-              // Bear target
-              setArMessage('🐻 You found the Bear! Look for more targets!');
-              setFoundCharacters(prev => ({ ...prev, bear: true }));
-            } else if (index === 2) {
-              // Baby target
+              // Baby target (bayko.jpeg)
               setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
               setFoundCharacters(prev => ({ ...prev, baby: true }));
+            } else if (index === 1) {
+              // Raccoon target (lefthand.jpeg)
+              setArMessage('🦝 You found the Raccoon on your left hand! Show your right hand ✋ for the bear!');
+              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+            } else if (index === 2) {
+              // Bear target (righthand.jpeg)
+              setArMessage('🐻 You found the Bear on your right hand! Show your left hand 🤚 for the raccoon!');
+              setFoundCharacters(prev => ({ ...prev, bear: true }));
             }
 
             setShowControls(true);
@@ -106,7 +106,7 @@ function App() {
 
           target.addEventListener('targetLost', () => {
             console.log(`❌ Target ${index} lost`);
-            setArMessage('🎮 Keep searching for target images!');
+            setArMessage('🎮 Keep searching! Show your hands to find the characters!');
             setShowControls(true);
           });
         });

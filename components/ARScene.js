@@ -7,10 +7,10 @@ function ARScene({ sceneRef, videoRef }) {
     position: 'relative'
   };
 
-  // Multi-target scene following MindAR documentation
+  // Multi-target scene using your combined targets.mind file
   const sceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/band.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'mindar-image': 'imageTargetSrc: assets/targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
     'vr-mode-ui': 'enabled: false',
@@ -85,8 +85,13 @@ function ARCamera() {
 
 function MultiTargets() {
   return React.createElement('a-entity', null,
-    // Target 0: Raccoon (using band example target 0)
+    // Target 0: Baby video (bayko.jpeg)
     React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
+      React.createElement(VideoPlane)
+    ),
+
+    // Target 1: Raccoon (lefthand.jpeg)
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 1' },
       React.createElement('a-gltf-model', {
         rotation: '0 0 0',
         position: '0 -0.25 0',
@@ -96,8 +101,8 @@ function MultiTargets() {
       })
     ),
 
-    // Target 1: Bear (using band example target 1)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 1' },
+    // Target 2: Bear (righthand.jpeg)
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 2' },
       React.createElement('a-gltf-model', {
         rotation: '0 0 0',
         position: '0 -0.25 0',
@@ -105,11 +110,6 @@ function MultiTargets() {
         src: '#bearModel',
         'animation-mixer': ''
       })
-    ),
-
-    // Target 2: Baby video (using band example target 2, but we'll replace with our video)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 2' },
-      React.createElement(VideoPlane)
     )
   );
 }
