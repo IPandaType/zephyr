@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Find the left hand 🤚 for raccoon, right hand ✋ for bear!');
+  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Look around to find the hidden bear 🐻 and raccoon 🦝!');
   const [showControls, setShowControls] = useState(true);
   const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
@@ -72,9 +72,49 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('🎮 AR Treasure Hunt! Find the left hand 🤚 for raccoon, right hand ✋ for bear!');
+        setArMessage('🎮 AR Treasure Hunt! Look around to find the hidden bear 🐻 and raccoon 🦝!');
         setTimeout(() => setShowControls(false), 5000);
+
+        // Add character discovery interactions after camera is ready
+        setTimeout(() => {
+          addCharacterInteractions();
+        }, 3000);
       });
+
+      const addCharacterInteractions = () => {
+        console.log('🎮 Adding character interactions...');
+
+        // Add click/tap interactions for characters
+        const raccoonCharacter = document.querySelector('#raccoon-character');
+        const bearCharacter = document.querySelector('#bear-character');
+        const floatingRaccoon = document.querySelector('#floating-raccoon');
+
+        if (raccoonCharacter) {
+          raccoonCharacter.addEventListener('click', () => {
+            console.log('🦝 Raccoon clicked!');
+            setArMessage('🦝 You found the Raccoon! Keep looking for the bear 🐻!');
+            setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+            setShowControls(true);
+          });
+        }
+
+        if (bearCharacter) {
+          bearCharacter.addEventListener('click', () => {
+            console.log('🐻 Bear clicked!');
+            setArMessage('🐻 You found the Bear! Keep looking for the raccoon 🦝!');
+            setFoundCharacters(prev => ({ ...prev, bear: true }));
+            setShowControls(true);
+          });
+        }
+
+        if (floatingRaccoon) {
+          floatingRaccoon.addEventListener('click', () => {
+            console.log('🦝 Floating raccoon clicked!');
+            setArMessage('🦝 You found a floating raccoon! Look for more characters!');
+            setShowControls(true);
+          });
+        }
+      };
 
       window.addEventListener('camera-error', () => {
         setArMessage('Camera access denied. Please allow camera access.');
@@ -92,7 +132,7 @@ function App() {
 
         targetEntity.addEventListener('targetLost', () => {
           console.log('👶 Baby target lost');
-          setArMessage('🎮 AR Treasure Hunt! Find the left hand 🤚 for raccoon, right hand ✋ for bear!');
+          setArMessage('🎮 Keep looking around to find the hidden bear 🐻 and raccoon 🦝!');
           setShowControls(true);
         });
       }

@@ -88,11 +88,78 @@ function AllTargets() {
     // Target 0: Baby video (bayko.jpeg)
     React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
       React.createElement(VideoPlane)
-    )
+    ),
 
-    // Note: For now, only baby target works since targets.mind only contains bayko.jpeg
-    // To add hand targets, we need to create a proper combined target file
-    // or use a different approach
+    // Random floating characters that appear without specific targets
+    React.createElement(RandomCharacters)
+  );
+}
+
+function RandomCharacters() {
+  return React.createElement('a-entity', null,
+    // Raccoon - appears randomly in space
+    React.createElement('a-entity', {
+      id: 'raccoon-character',
+      position: '1.5 0 -2',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 45 0',
+        position: '0 0 0',
+        scale: '0.1 0.1 0.1',
+        src: '#raccoonModel',
+        'animation-mixer': '',
+        'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true'
+      }),
+      React.createElement('a-text', {
+        value: '🦝 Raccoon Found!',
+        position: '0 0.5 0',
+        align: 'center',
+        color: 'white',
+        'background-color': 'rgba(0,0,0,0.7)',
+        'background-padding': '10 5'
+      })
+    ),
+
+    // Bear - appears randomly in another location
+    React.createElement('a-entity', {
+      id: 'bear-character',
+      position: '-1.5 0 -2',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 -45 0',
+        position: '0 0 0',
+        scale: '0.1 0.1 0.1',
+        src: '#bearModel',
+        'animation-mixer': '',
+        'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true'
+      }),
+      React.createElement('a-text', {
+        value: '🐻 Bear Found!',
+        position: '0 0.5 0',
+        align: 'center',
+        color: 'white',
+        'background-color': 'rgba(0,0,0,0.7)',
+        'background-padding': '10 5'
+      })
+    ),
+
+    // Additional floating raccoon
+    React.createElement('a-entity', {
+      id: 'floating-raccoon',
+      position: '0 1.5 -3',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 180 0',
+        position: '0 0 0',
+        scale: '0.08 0.08 0.08',
+        src: '#raccoonModel',
+        'animation-mixer': '',
+        'animation': 'property: position; to: 0.5 1.5 -3; dir: alternate; dur: 5000; loop: true'
+      })
+    )
   );
 }
 
