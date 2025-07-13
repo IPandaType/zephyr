@@ -1,28 +1,39 @@
 function ARScene({ sceneRef, videoRef }) {
-  const { ARSceneWrapper } = window.StyledComponents;
+  const { ARSceneWrapper } = window.StyledComponents || {};
 
-  return React.createElement(ARSceneWrapper, null,
-    React.createElement('a-scene', {
-      ref: sceneRef,
-      'mindar-image': 'imageTargetSrc: targets.mind; autoStart: true;',
-      'color-space': 'sRGB',
-      renderer: 'colorManagement: true, physicallyCorrectLights',
-      'vr-mode-ui': 'enabled: false',
-      'device-orientation-permission-ui': 'enabled: true'
-    },
-      React.createElement(ARAssets, { videoRef }),
-      React.createElement(ARCamera),
-      React.createElement(ARTarget)
-    )
+  const fallbackWrapperStyle = {
+    width: '100vw',
+    height: '100vh',
+    position: 'relative'
+  };
+
+  const sceneElement = React.createElement('a-scene', {
+    ref: sceneRef,
+    'mindar-image': 'imageTargetSrc: targets.mind; autoStart: true;',
+    'color-space': 'sRGB',
+    renderer: 'colorManagement: true, physicallyCorrectLights',
+    'vr-mode-ui': 'enabled: false',
+    'device-orientation-permission-ui': 'enabled: true'
+  },
+    React.createElement(ARAssets, { videoRef }),
+    React.createElement(ARCamera),
+    React.createElement(ARTarget)
   );
+
+  if (!ARSceneWrapper) {
+    return React.createElement('div', { style: fallbackWrapperStyle }, sceneElement);
+  }
+
+  return React.createElement(ARSceneWrapper, null, sceneElement);
 }
+
 
 function ARAssets({ videoRef }) {
   return React.createElement('a-assets', null,
     React.createElement('video', {
       id: 'baby-video',
       ref: videoRef,
-      src: 'baby2.mp4',
+      src: 'baby.mp4',
       autoPlay: true,
       loop: true,
       muted: true,

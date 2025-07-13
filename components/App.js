@@ -9,6 +9,14 @@ function App() {
   useEffect(() => {
     // Initialize AR scene after component mounts
     const initializeAR = () => {
+      console.log('🚀 Initializing AR...');
+
+      // Check if video element exists
+      const babyVideo = document.querySelector('#baby-video');
+      console.log('📹 Video element found:', !!babyVideo);
+      if (babyVideo) {
+        console.log('📹 Video src:', babyVideo.src);
+      }
       // Listen for camera events
       window.addEventListener('camera-init', () => {
         setArMessage('Camera ready! Point at the target image.');
@@ -78,7 +86,25 @@ function App() {
     }
   };
 
-  const { AppContainer } = window.StyledComponents;
+  const { AppContainer } = window.StyledComponents || {};
+
+  // Fallback if StyledComponents not loaded
+  if (!AppContainer) {
+    console.error('❌ StyledComponents not loaded properly');
+    return React.createElement('div', {
+      style: { width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }
+    },
+      React.createElement(ARControls, {
+        arMessage,
+        showControls,
+        onScaleAnimation: scaleAnimation
+      }),
+      React.createElement(ARScene, {
+        sceneRef,
+        videoRef
+      })
+    );
+  }
 
   return React.createElement(AppContainer, null,
     React.createElement(ARControls, {
