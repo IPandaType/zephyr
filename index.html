@@ -14,10 +14,10 @@
       <br>
       <button onclick="showSuccess()" style="margin-top:5px;padding:5px;background:#4CAF50;color:white;">Test AR Working</button>
       <br>
-      <button onclick="scaleAnimation(0.3)" style="margin-top:5px;padding:5px;">Small</button>
-      <button onclick="scaleAnimation(0.5)" style="margin-top:5px;padding:5px;">Medium</button>
-      <button onclick="scaleAnimation(0.7)" style="margin-top:5px;padding:5px;">Large</button>
-      <button onclick="scaleAnimation(1.0)" style="margin-top:5px;padding:5px;">Extra Large</button>
+      <button onclick="scaleAnimation(0.7)" style="margin-top:5px;padding:5px;">Small</button>
+      <button onclick="scaleAnimation(1.0)" style="margin-top:5px;padding:5px;">Medium</button>
+      <button onclick="scaleAnimation(1.25)" style="margin-top:5px;padding:5px;">Large</button>
+      <button onclick="scaleAnimation(1.50)" style="margin-top:5px;padding:5px;">Extra Large</button>
       <br>
       <button onclick="positionAnimation(0, -0.2, 0)" style="margin-top:5px;padding:5px;">Above Logo</button>
       <button onclick="positionAnimation(0, -0.3, 0)" style="margin-top:5px;padding:5px;">Below Logo</button>
@@ -27,7 +27,7 @@
       <button onclick="rotateAnimation(-90, 0, 0)" style="margin-top:5px;padding:5px;">Flat</button>
       <button onclick="rotateAnimation(0, 180, 0)" style="margin-top:5px;padding:5px;">Flipped</button>
     </div>
-    <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
+
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
            color-space="sRGB"
            renderer="colorManagement: true, physicallyCorrectLights"
@@ -48,12 +48,12 @@
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Video animation plane - your baby2.mp4 file (upright, stable) -->
+        <!-- Video animation plane - your baby2.mp4 file (upright, stable, extra large) -->
         <a-plane id="baby-animation-plane"
                  src="#baby-video"
                  position="0 -0.3 0"
-                 width="0.5"
-                 height="0.5"
+                 width="1.0"
+                 height="1.0"
                  rotation="0 0 0"
                  material="transparent: true; shader: flat"></a-plane>
       </a-entity>
@@ -94,7 +94,6 @@
           animationPlane.setAttribute('width', newScale);
           animationPlane.setAttribute('height', newScale);
           messageSpan.textContent = `Animation scaled to ${newScale}. Point camera at target.`;
-          console.log(`🔧 Animation scaled to: ${newScale}`);
         }
       }
 
@@ -104,7 +103,6 @@
         if (animationPlane) {
           animationPlane.setAttribute('position', `${x} ${y} ${z}`);
           messageSpan.textContent = `Animation positioned at Y: ${y}. Point camera at target.`;
-          console.log(`📍 Animation positioned at: ${x}, ${y}, ${z}`);
         }
       }
 
@@ -114,7 +112,6 @@
         if (animationPlane) {
           animationPlane.setAttribute('rotation', `${x} ${y} ${z}`);
           messageSpan.textContent = `Animation rotated to: ${x}, ${y}, ${z}. Point camera at target.`;
-          console.log(`🔄 Animation rotated to: ${x}, ${y}, ${z}`);
         }
       }
 
@@ -125,19 +122,17 @@
 
         if (animationPlane) {
           messageSpan.textContent = '✅ Video Animation found! Point at target to see it.';
-          console.log('✅ Video Animation plane exists in DOM:', animationPlane);
 
           // Make video larger for testing
-          animationPlane.setAttribute('width', '0.8');
-          animationPlane.setAttribute('height', '0.8');
+          animationPlane.setAttribute('width', '1.2');
+          animationPlane.setAttribute('height', '1.2');
 
           // Ensure video is playing
           if (babyVideo) {
-            babyVideo.play().catch(e => console.log('Video play failed:', e));
+            babyVideo.play();
           }
         } else {
           messageSpan.textContent = '❌ No video animation found in DOM';
-          console.log('❌ No video animation found');
         }
       }
 
