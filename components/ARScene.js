@@ -9,7 +9,7 @@ function ARScene({ sceneRef, videoRef }) {
 
   const sceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/band.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'mindar-image': 'imageTargetSrc: targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
     'vr-mode-ui': 'enabled: false',
@@ -17,7 +17,8 @@ function ARScene({ sceneRef, videoRef }) {
   },
     React.createElement(ARAssets, { videoRef }),
     React.createElement(ARCamera),
-    React.createElement(ARTarget)
+    React.createElement(ARTarget),
+    React.createElement(RandomCharacters)
   );
 
   if (!ARSceneWrapper) {
@@ -72,31 +73,74 @@ function ARCamera() {
 
 function ARTarget() {
   return React.createElement('a-entity', null,
-    // Target 0: Raccoon character
+    // Target 0: Baby video (bayko.jpeg from targets.mind)
     React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
-      React.createElement('a-gltf-model', {
-        rotation: '0 0 0',
-        position: '0 -0.25 0',
-        scale: '0.05 0.05 0.05',
-        src: '#raccoonModel',
-        'animation-mixer': ''
-      })
-    ),
-
-    // Target 1: Bear character
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 1' },
-      React.createElement('a-gltf-model', {
-        rotation: '0 0 0',
-        position: '0 -0.25 0',
-        scale: '0.05 0.05 0.05',
-        src: '#bearModel',
-        'animation-mixer': ''
-      })
-    ),
-
-    // Target 2: Baby video (your wife's photo - we'll update this)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 2' },
       React.createElement(VideoPlane)
+    )
+  );
+}
+
+// Random floating 3D characters that appear anywhere in the scene
+function RandomCharacters() {
+  return React.createElement('a-entity', null,
+    // Raccoon - appears randomly in space
+    React.createElement('a-entity', {
+      position: '1.5 1 -2',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 45 0',
+        position: '0 0 0',
+        scale: '0.2 0.2 0.2',
+        src: '#raccoonModel',
+        'animation-mixer': '',
+        'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true'
+      })
+    ),
+
+    // Bear - appears randomly in another location
+    React.createElement('a-entity', {
+      position: '-1.5 0.5 -2.5',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 -45 0',
+        position: '0 0 0',
+        scale: '0.2 0.2 0.2',
+        src: '#bearModel',
+        'animation-mixer': '',
+        'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true'
+      })
+    ),
+
+    // Additional raccoon in different location
+    React.createElement('a-entity', {
+      position: '0 -0.5 -4',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 180 0',
+        position: '0 0 0',
+        scale: '0.15 0.15 0.15',
+        src: '#raccoonModel',
+        'animation-mixer': '',
+        'animation': 'property: position; to: 0.5 -0.5 -4; dir: alternate; dur: 5000; loop: true'
+      })
+    ),
+
+    // Additional bear in different location
+    React.createElement('a-entity', {
+      position: '2.5 0 -1.5',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 90 0',
+        position: '0 0 0',
+        scale: '0.25 0.25 0.25',
+        src: '#bearModel',
+        'animation-mixer': '',
+        'animation': 'property: position; to: 2.5 0.8 -1.5; dir: alternate; dur: 6000; loop: true'
+      })
     )
   );
 }
