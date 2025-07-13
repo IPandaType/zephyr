@@ -26,10 +26,6 @@
       <button onclick="rotateAnimation(0, 0, 0)" style="margin-top:5px;padding:5px;">Upright</button>
       <button onclick="rotateAnimation(-90, 0, 0)" style="margin-top:5px;padding:5px;">Flat</button>
       <button onclick="rotateAnimation(0, 180, 0)" style="margin-top:5px;padding:5px;">Flipped</button>
-      <br>
-      <button onclick="positionText(0.6, -0.3, 0)" style="margin-top:5px;padding:5px;">Text Right</button>
-      <button onclick="positionText(-0.6, -0.3, 0)" style="margin-top:5px;padding:5px;">Text Left</button>
-      <button onclick="positionText(0, -0.6, 0)" style="margin-top:5px;padding:5px;">Text Below</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -60,19 +56,6 @@
                  height="0.5"
                  rotation="0 0 0"
                  material="transparent: true; shader: flat"></a-plane>
-
-        <!-- Announcement text next to the baby -->
-        <a-text id="announcement-text"
-                value="Mark your calendars! My debut is January 2026 📅👣"
-                position="0.6 -0.3 0"
-                scale="0.3 0.3 0.3"
-                color="#FF69B4"
-                font="kelsonsans"
-                align="left"
-                wrap-count="25"
-                geometry="primitive: plane; width: auto; height: auto"
-                material="color: white; opacity: 0.9; transparent: true"
-                animation="property: scale; to: 0.32 0.32 0.32; dir: alternate; dur: 4000; loop: true"></a-text>
       </a-entity>
     </a-scene>
     <script>
@@ -135,41 +118,26 @@
         }
       }
 
-      // Function to adjust text position
-      function positionText(x, y, z) {
-        const announcementText = document.querySelector('#announcement-text');
-        if (announcementText) {
-          announcementText.setAttribute('position', `${x} ${y} ${z}`);
-          messageSpan.textContent = `Text positioned at: ${x}, ${y}, ${z}. Point camera at target.`;
-          console.log(`📝 Text positioned at: ${x}, ${y}, ${z}`);
-        }
-      }
-
-      // Test function to check if video animation and text exist
+      // Test function to check if video animation exists
       function showSuccess() {
         const animationPlane = document.querySelector('[mindar-image-target] a-plane');
-        const announcementText = document.querySelector('[mindar-image-target] a-text');
         const babyVideo = document.querySelector('#baby-video');
 
-        if (animationPlane && announcementText) {
-          messageSpan.textContent = '✅ Video Animation & Text found! Point at target to see them.';
+        if (animationPlane) {
+          messageSpan.textContent = '✅ Video Animation found! Point at target to see it.';
           console.log('✅ Video Animation plane exists in DOM:', animationPlane);
-          console.log('✅ Announcement text exists in DOM:', announcementText);
 
           // Make video larger for testing
           animationPlane.setAttribute('width', '0.8');
           animationPlane.setAttribute('height', '0.8');
-
-          // Make text more visible for testing
-          announcementText.setAttribute('scale', '0.4 0.4 0.4');
 
           // Ensure video is playing
           if (babyVideo) {
             babyVideo.play().catch(e => console.log('Video play failed:', e));
           }
         } else {
-          messageSpan.textContent = '❌ Video animation or text not found in DOM';
-          console.log('❌ Missing elements - Animation:', !!animationPlane, 'Text:', !!announcementText);
+          messageSpan.textContent = '❌ No video animation found in DOM';
+          console.log('❌ No video animation found');
         }
       }
 
