@@ -21,33 +21,30 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- No external models - using built-in geometry only -->
+        <!-- GLB model - optimized for web -->
+        <a-asset-item id="babyModel" src="Baby.glb"></a-asset-item>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Larger, more visible 3D baby model -->
-        <a-group position="0 0 0" scale="1 1 1">
-          <!-- Head - bright and spinning -->
+        <!-- GLB Baby Model with fallback -->
+        <a-gltf-model id="baby-gltf"
+                      src="#babyModel"
+                      position="0 0 0"
+                      scale="0.1 0.1 0.1"
+                      rotation="0 0 0"
+                      animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+                      animation-mixer></a-gltf-model>
+
+        <!-- Fallback geometric model (hidden by default) -->
+        <a-group id="fallback-model" visible="false" position="0 0 0" scale="0.5 0.5 0.5">
           <a-sphere position="0 0.5 0" radius="0.2" color="#FF69B4"
-                    animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"
-                    material="emissive: #FF1493; emissiveIntensity: 0.3"></a-sphere>
-          <!-- Body -->
-          <a-cylinder position="0 0 0" radius="0.15" height="0.4" color="#FFB6C1"
-                      material="emissive: #FF69B4; emissiveIntensity: 0.2"></a-cylinder>
-          <!-- Arms -->
-          <a-cylinder position="-0.25 0.15 0" radius="0.05" height="0.3" color="#FFB6C1" rotation="0 0 30"
-                      material="emissive: #FF69B4; emissiveIntensity: 0.2"></a-cylinder>
-          <a-cylinder position="0.25 0.15 0" radius="0.05" height="0.3" color="#FFB6C1" rotation="0 0 -30"
-                      material="emissive: #FF69B4; emissiveIntensity: 0.2"></a-cylinder>
-          <!-- Legs -->
-          <a-cylinder position="-0.08 -0.35 0" radius="0.05" height="0.3" color="#FFB6C1"
-                      material="emissive: #FF69B4; emissiveIntensity: 0.2"></a-cylinder>
-          <a-cylinder position="0.08 -0.35 0" radius="0.05" height="0.3" color="#FFB6C1"
-                      material="emissive: #FF69B4; emissiveIntensity: 0.2"></a-cylinder>
-          <!-- Extra visibility - add a glowing box around it -->
-          <a-box position="0 0 -0.1" width="0.8" height="0.8" depth="0.1" color="#FF69B4" opacity="0.3"
-                 animation="property: rotation; to: 0 0 360; loop: true; dur: 6000"></a-box>
+                    animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-sphere>
+          <a-cylinder position="0 0 0" radius="0.15" height="0.4" color="#FFB6C1"></a-cylinder>
+          <a-cylinder position="-0.25 0.15 0" radius="0.05" height="0.3" color="#FFB6C1" rotation="0 0 30"></a-cylinder>
+          <a-cylinder position="0.25 0.15 0" radius="0.05" height="0.3" color="#FFB6C1" rotation="0 0 -30"></a-cylinder>
+          <a-cylinder position="-0.08 -0.35 0" radius="0.05" height="0.3" color="#FFB6C1"></a-cylinder>
+          <a-cylinder position="0.08 -0.35 0" radius="0.05" height="0.3" color="#FFB6C1"></a-cylinder>
         </a-group>
       </a-entity>
     </a-scene>
@@ -80,19 +77,47 @@
         statusDiv.style.display = 'block';
       });
 
-      // Test function to check if model exists
+      // Test function to check if GLB model exists
       function showSuccess() {
-        const model = document.querySelector('[mindar-image-target] a-group');
-        if (model) {
-          messageSpan.textContent = '✅ 3D Baby model found! Point at target to see it.';
-          console.log('✅ AR model exists in DOM:', model);
-          // Make it extra visible for testing
-          model.setAttribute('scale', '2 2 2');
+        const gltfModel = document.querySelector('[mindar-image-target] a-gltf-model');
+        const fallbackModel = document.querySelector('[mindar-image-target] #fallback-model');
+
+        if (gltfModel) {
+          messageSpan.textContent = '✅ GLB Baby model found! Point at target to see it.';
+          console.log('✅ GLB model exists in DOM:', gltfModel);
+          // Make it larger for testing
+          gltfModel.setAttribute('scale', '0.2 0.2 0.2');
+        } else if (fallbackModel) {
+          messageSpan.textContent = '✅ Fallback model found! Point at target to see it.';
+          console.log('✅ Fallback model exists in DOM:', fallbackModel);
+          fallbackModel.setAttribute('visible', 'true');
+          fallbackModel.setAttribute('scale', '1 1 1');
         } else {
-          messageSpan.textContent = '❌ Model not found in DOM';
-          console.log('❌ No model found');
+          messageSpan.textContent = '❌ No models found in DOM';
+          console.log('❌ No models found');
         }
       }
+
+      // GLB model error handling
+      document.addEventListener('DOMContentLoaded', () => {
+        const gltfModel = document.querySelector('#baby-gltf');
+        const fallbackModel = document.querySelector('#fallback-model');
+
+        if (gltfModel) {
+          gltfModel.addEventListener('model-loaded', () => {
+            console.log('✅ GLB model loaded successfully');
+            messageSpan.textContent = 'GLB Baby model loaded! Point camera at target.';
+          });
+
+          gltfModel.addEventListener('model-error', (event) => {
+            console.log('❌ GLB model failed to load:', event.detail);
+            messageSpan.textContent = 'GLB failed. Using fallback model.';
+            if (fallbackModel) {
+              fallbackModel.setAttribute('visible', 'true');
+            }
+          });
+        }
+      });
 
       // Auto-check when page loads
       setTimeout(() => {
