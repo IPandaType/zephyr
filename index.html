@@ -30,21 +30,21 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- Simple 2D animation instead of 3D model -->
-        <img id="baby-animation" src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" />
+        <!-- Local baby video animation -->
+        <video id="baby-video" src="baby.mp4" autoplay loop muted playsinline crossorigin="anonymous"></video>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Simple 2D animated image - much easier! -->
+        <!-- Video animation plane - your baby.mp4 file -->
         <a-plane id="baby-animation-plane"
-                 src="#baby-animation"
+                 src="#baby-video"
                  position="0 -0.3 0"
                  width="0.5"
                  height="0.5"
                  rotation="-90 0 0"
-                 material="transparent: true; alphaTest: 0.5"
-                 animation="property: scale; to: 1.1 1.1 1.1; dir: alternate; dur: 2000; loop: true"></a-plane>
+                 material="transparent: true; shader: flat"
+                 animation="property: scale; to: 1.05 1.05 1.05; dir: alternate; dur: 3000; loop: true"></a-plane>
       </a-entity>
     </a-scene>
     <script>
@@ -97,35 +97,46 @@
         }
       }
 
-      // Test function to check if animation exists
+      // Test function to check if video animation exists
       function showSuccess() {
         const animationPlane = document.querySelector('[mindar-image-target] a-plane');
+        const babyVideo = document.querySelector('#baby-video');
 
         if (animationPlane) {
-          messageSpan.textContent = '✅ 2D Animation found! Point at target to see it.';
-          console.log('✅ 2D Animation plane exists in DOM:', animationPlane);
+          messageSpan.textContent = '✅ Video Animation found! Point at target to see it.';
+          console.log('✅ Video Animation plane exists in DOM:', animationPlane);
           // Make it larger for testing
-          animationPlane.setAttribute('width', '1.0');
-          animationPlane.setAttribute('height', '1.0');
+          animationPlane.setAttribute('width', '0.8');
+          animationPlane.setAttribute('height', '0.8');
+
+          // Ensure video is playing
+          if (babyVideo) {
+            babyVideo.play().catch(e => console.log('Video play failed:', e));
+          }
         } else {
-          messageSpan.textContent = '❌ No animation found in DOM';
-          console.log('❌ No animation found');
+          messageSpan.textContent = '❌ No video animation found in DOM';
+          console.log('❌ No video animation found');
         }
       }
 
-      // Simple animation loading check
+      // Video animation loading check
       document.addEventListener('DOMContentLoaded', () => {
-        const animationImg = document.querySelector('#baby-animation');
+        const babyVideo = document.querySelector('#baby-video');
 
-        if (animationImg) {
-          animationImg.addEventListener('load', () => {
-            console.log('✅ Baby animation loaded successfully');
-            messageSpan.textContent = 'Animation loaded! Point camera at target.';
+        if (babyVideo) {
+          babyVideo.addEventListener('loadeddata', () => {
+            console.log('✅ Baby video loaded successfully');
+            messageSpan.textContent = 'Video animation loaded! Point camera at target.';
           });
 
-          animationImg.addEventListener('error', (event) => {
-            console.log('❌ Animation failed to load:', event);
-            messageSpan.textContent = 'Animation failed to load.';
+          babyVideo.addEventListener('error', (event) => {
+            console.log('❌ Video failed to load:', event);
+            messageSpan.textContent = 'Video failed to load.';
+          });
+
+          babyVideo.addEventListener('canplay', () => {
+            console.log('✅ Video ready to play');
+            babyVideo.play().catch(e => console.log('Video autoplay prevented:', e));
           });
         }
       });
