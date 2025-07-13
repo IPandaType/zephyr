@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Look around to find the hidden bear 🐻 and raccoon 🦝!');
+  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
   const [showControls, setShowControls] = useState(true);
   const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
@@ -72,55 +72,15 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('🎮 AR Treasure Hunt! Look around to find the hidden bear 🐻 and raccoon 🦝!');
+        setArMessage('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
         setTimeout(() => setShowControls(false), 5000);
-
-        // Add character discovery interactions after camera is ready
-        setTimeout(() => {
-          addCharacterInteractions();
-        }, 3000);
       });
-
-      const addCharacterInteractions = () => {
-        console.log('🎮 Adding character interactions...');
-
-        // Add click/tap interactions for characters
-        const raccoonCharacter = document.querySelector('#raccoon-character');
-        const bearCharacter = document.querySelector('#bear-character');
-        const floatingRaccoon = document.querySelector('#floating-raccoon');
-
-        if (raccoonCharacter) {
-          raccoonCharacter.addEventListener('click', () => {
-            console.log('🦝 Raccoon clicked!');
-            setArMessage('🦝 You found the Raccoon! Keep looking for the bear 🐻!');
-            setFoundCharacters(prev => ({ ...prev, raccoon: true }));
-            setShowControls(true);
-          });
-        }
-
-        if (bearCharacter) {
-          bearCharacter.addEventListener('click', () => {
-            console.log('🐻 Bear clicked!');
-            setArMessage('🐻 You found the Bear! Keep looking for the raccoon 🦝!');
-            setFoundCharacters(prev => ({ ...prev, bear: true }));
-            setShowControls(true);
-          });
-        }
-
-        if (floatingRaccoon) {
-          floatingRaccoon.addEventListener('click', () => {
-            console.log('🦝 Floating raccoon clicked!');
-            setArMessage('🦝 You found a floating raccoon! Look for more characters!');
-            setShowControls(true);
-          });
-        }
-      };
 
       window.addEventListener('camera-error', () => {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Listen for AR target events
+      // Listen for AR target events from main scene
       const targetEntity = document.querySelector('[mindar-image-target]');
       if (targetEntity) {
         targetEntity.addEventListener('targetFound', () => {
@@ -132,10 +92,47 @@ function App() {
 
         targetEntity.addEventListener('targetLost', () => {
           console.log('👶 Baby target lost');
-          setArMessage('🎮 Keep looking around to find the hidden bear 🐻 and raccoon 🦝!');
+          setArMessage('🎮 Show your hands to find the characters!');
           setShowControls(true);
         });
       }
+
+      // Listen for hand tracking events (added after delay)
+      setTimeout(() => {
+        // Left hand (raccoon) events
+        const leftHandTargets = document.querySelectorAll('#lefthand-scene [mindar-image-target]');
+        leftHandTargets.forEach(target => {
+          target.addEventListener('targetFound', () => {
+            console.log('🦝 Left hand target found! Raccoon should appear');
+            setArMessage('🦝 You found the Raccoon on your left hand! Show your right hand ✋ for the bear!');
+            setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+            setShowControls(true);
+          });
+
+          target.addEventListener('targetLost', () => {
+            console.log('🦝 Left hand target lost');
+            setArMessage('🎮 Keep showing your hands to find the characters!');
+            setShowControls(true);
+          });
+        });
+
+        // Right hand (bear) events
+        const rightHandTargets = document.querySelectorAll('#righthand-scene [mindar-image-target]');
+        rightHandTargets.forEach(target => {
+          target.addEventListener('targetFound', () => {
+            console.log('🐻 Right hand target found! Bear should appear');
+            setArMessage('🐻 You found the Bear on your right hand! Show your left hand 🤚 for the raccoon!');
+            setFoundCharacters(prev => ({ ...prev, bear: true }));
+            setShowControls(true);
+          });
+
+          target.addEventListener('targetLost', () => {
+            console.log('🐻 Right hand target lost');
+            setArMessage('🎮 Keep showing your hands to find the characters!');
+            setShowControls(true);
+          });
+        });
+      }, 5000);
 
 
     };
