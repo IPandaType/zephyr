@@ -14,14 +14,14 @@
       <br>
       <button onclick="showSuccess()" style="margin-top:5px;padding:5px;background:#4CAF50;color:white;">Test AR Working</button>
       <br>
-      <button onclick="scaleModel(0.003)" style="margin-top:5px;padding:5px;">Tiny</button>
-      <button onclick="scaleModel(0.005)" style="margin-top:5px;padding:5px;">Small</button>
-      <button onclick="scaleModel(0.01)" style="margin-top:5px;padding:5px;">Medium</button>
-      <button onclick="scaleModel(0.02)" style="margin-top:5px;padding:5px;">Large</button>
+      <button onclick="scaleAnimation(0.3)" style="margin-top:5px;padding:5px;">Small</button>
+      <button onclick="scaleAnimation(0.5)" style="margin-top:5px;padding:5px;">Medium</button>
+      <button onclick="scaleAnimation(0.7)" style="margin-top:5px;padding:5px;">Large</button>
+      <button onclick="scaleAnimation(1.0)" style="margin-top:5px;padding:5px;">Extra Large</button>
       <br>
-      <button onclick="positionModel(0, -0.2, 0)" style="margin-top:5px;padding:5px;">Above Logo</button>
-      <button onclick="positionModel(0, -0.3, 0)" style="margin-top:5px;padding:5px;">Below Logo</button>
-      <button onclick="positionModel(0, -0.5, 0)" style="margin-top:5px;padding:5px;">Far Below</button>
+      <button onclick="positionAnimation(0, -0.2, 0)" style="margin-top:5px;padding:5px;">Above Logo</button>
+      <button onclick="positionAnimation(0, -0.3, 0)" style="margin-top:5px;padding:5px;">Below Logo</button>
+      <button onclick="positionAnimation(0, -0.5, 0)" style="margin-top:5px;padding:5px;">Far Below</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -30,30 +30,21 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- Baby Waving GLB model - with animation -->
-        <a-asset-item id="babyModel" src="babyWaving.glb"></a-asset-item>
+        <!-- Simple 2D animation instead of 3D model -->
+        <img id="baby-animation" src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" />
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- GLB Baby Model with fallback -->
-        <a-gltf-model id="baby-gltf"
-                      src="#babyModel"
-                      position="0 -0.3 0"
-                      scale="0.005 0.005 0.005"
-                      rotation="0 0 0"
-                      animation-mixer="clip: *; loop: repeat; repetitions: Infinity"></a-gltf-model>
-
-        <!-- Fallback geometric model (hidden by default) -->
-        <a-group id="fallback-model" visible="false" position="0 0 0" scale="0.5 0.5 0.5">
-          <a-sphere position="0 0.5 0" radius="0.2" color="#FF69B4"
-                    animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-sphere>
-          <a-cylinder position="0 0 0" radius="0.15" height="0.4" color="#FFB6C1"></a-cylinder>
-          <a-cylinder position="-0.25 0.15 0" radius="0.05" height="0.3" color="#FFB6C1" rotation="0 0 30"></a-cylinder>
-          <a-cylinder position="0.25 0.15 0" radius="0.05" height="0.3" color="#FFB6C1" rotation="0 0 -30"></a-cylinder>
-          <a-cylinder position="-0.08 -0.35 0" radius="0.05" height="0.3" color="#FFB6C1"></a-cylinder>
-          <a-cylinder position="0.08 -0.35 0" radius="0.05" height="0.3" color="#FFB6C1"></a-cylinder>
-        </a-group>
+        <!-- Simple 2D animated image - much easier! -->
+        <a-plane id="baby-animation-plane"
+                 src="#baby-animation"
+                 position="0 -0.3 0"
+                 width="0.5"
+                 height="0.5"
+                 rotation="-90 0 0"
+                 material="transparent: true; alphaTest: 0.5"
+                 animation="property: scale; to: 1.1 1.1 1.1; dir: alternate; dur: 2000; loop: true"></a-plane>
       </a-entity>
     </a-scene>
     <script>
@@ -85,64 +76,56 @@
         statusDiv.style.display = 'block';
       });
 
-      // Function to adjust model scale
-      function scaleModel(newScale) {
-        const gltfModel = document.querySelector('#baby-gltf');
-        if (gltfModel) {
-          gltfModel.setAttribute('scale', `${newScale} ${newScale} ${newScale}`);
-          messageSpan.textContent = `Model scaled to ${newScale}. Point camera at target.`;
-          console.log(`🔧 Model scaled to: ${newScale}`);
+      // Function to adjust animation scale
+      function scaleAnimation(newScale) {
+        const animationPlane = document.querySelector('#baby-animation-plane');
+        if (animationPlane) {
+          animationPlane.setAttribute('width', newScale);
+          animationPlane.setAttribute('height', newScale);
+          messageSpan.textContent = `Animation scaled to ${newScale}. Point camera at target.`;
+          console.log(`🔧 Animation scaled to: ${newScale}`);
         }
       }
 
-      // Function to adjust model position
-      function positionModel(x, y, z) {
-        const gltfModel = document.querySelector('#baby-gltf');
-        if (gltfModel) {
-          gltfModel.setAttribute('position', `${x} ${y} ${z}`);
-          messageSpan.textContent = `Model positioned at Y: ${y}. Point camera at target.`;
-          console.log(`📍 Model positioned at: ${x}, ${y}, ${z}`);
+      // Function to adjust animation position
+      function positionAnimation(x, y, z) {
+        const animationPlane = document.querySelector('#baby-animation-plane');
+        if (animationPlane) {
+          animationPlane.setAttribute('position', `${x} ${y} ${z}`);
+          messageSpan.textContent = `Animation positioned at Y: ${y}. Point camera at target.`;
+          console.log(`📍 Animation positioned at: ${x}, ${y}, ${z}`);
         }
       }
 
-      // Test function to check if GLB model exists
+      // Test function to check if animation exists
       function showSuccess() {
-        const gltfModel = document.querySelector('[mindar-image-target] a-gltf-model');
-        const fallbackModel = document.querySelector('[mindar-image-target] #fallback-model');
+        const animationPlane = document.querySelector('[mindar-image-target] a-plane');
 
-        if (gltfModel) {
-          messageSpan.textContent = '✅ Baby Waving GLB model found! Point at target to see it.';
-          console.log('✅ Baby Waving GLB model exists in DOM:', gltfModel);
+        if (animationPlane) {
+          messageSpan.textContent = '✅ 2D Animation found! Point at target to see it.';
+          console.log('✅ 2D Animation plane exists in DOM:', animationPlane);
           // Make it larger for testing
-          gltfModel.setAttribute('scale', '0.01 0.01 0.01');
-        } else if (fallbackModel) {
-          messageSpan.textContent = '✅ Fallback model found! Point at target to see it.';
-          console.log('✅ Fallback model exists in DOM:', fallbackModel);
-          fallbackModel.setAttribute('visible', 'true');
-          fallbackModel.setAttribute('scale', '1 1 1');
+          animationPlane.setAttribute('width', '1.0');
+          animationPlane.setAttribute('height', '1.0');
         } else {
-          messageSpan.textContent = '❌ No models found in DOM';
-          console.log('❌ No models found');
+          messageSpan.textContent = '❌ No animation found in DOM';
+          console.log('❌ No animation found');
         }
       }
 
-      // GLB model error handling
+      // Simple animation loading check
       document.addEventListener('DOMContentLoaded', () => {
-        const gltfModel = document.querySelector('#baby-gltf');
-        const fallbackModel = document.querySelector('#fallback-model');
+        const animationImg = document.querySelector('#baby-animation');
 
-        if (gltfModel) {
-          gltfModel.addEventListener('model-loaded', () => {
-            console.log('✅ Baby Waving GLB model loaded successfully');
-            messageSpan.textContent = 'Baby Waving model loaded! Point camera at target.';
+        if (animationImg) {
+          animationImg.addEventListener('load', () => {
+            console.log('✅ Baby animation loaded successfully');
+            messageSpan.textContent = 'Animation loaded! Point camera at target.';
           });
 
-          gltfModel.addEventListener('model-error', (event) => {
-            console.log('❌ GLB model failed to load:', event.detail);
-            messageSpan.textContent = 'GLB failed. Using fallback model.';
-            if (fallbackModel) {
-              fallbackModel.setAttribute('visible', 'true');
-            }
+          animationImg.addEventListener('error', (event) => {
+            console.log('❌ Animation failed to load:', event);
+            messageSpan.textContent = 'Animation failed to load.';
           });
         }
       });
