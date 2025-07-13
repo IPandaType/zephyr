@@ -30,8 +30,8 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- GLB model - optimized for web -->
-        <a-asset-item id="babyModel" src="Baby.glb"></a-asset-item>
+        <!-- FBX model - baby waving animation -->
+        <a-asset-item id="babyModel" src="babyWaving.fbx"></a-asset-item>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -42,7 +42,7 @@
                       position="0 -0.3 0"
                       scale="0.005 0.005 0.005"
                       rotation="0 0 0"
-                      animation-mixer></a-gltf-model>
+                      animation-mixer="clip: *; loop: repeat"></a-gltf-model>
 
         <!-- Fallback geometric model (hidden by default) -->
         <a-group id="fallback-model" visible="false" position="0 0 0" scale="0.5 0.5 0.5">
@@ -105,16 +105,16 @@
         }
       }
 
-      // Test function to check if GLB model exists
+      // Test function to check if FBX model exists
       function showSuccess() {
         const gltfModel = document.querySelector('[mindar-image-target] a-gltf-model');
         const fallbackModel = document.querySelector('[mindar-image-target] #fallback-model');
 
         if (gltfModel) {
-          messageSpan.textContent = '✅ GLB Baby model found! Point at target to see it.';
-          console.log('✅ GLB model exists in DOM:', gltfModel);
+          messageSpan.textContent = '✅ FBX Baby Waving model found! Point at target to see it.';
+          console.log('✅ FBX model exists in DOM:', gltfModel);
           // Make it larger for testing
-          gltfModel.setAttribute('scale', '0.2 0.2 0.2');
+          gltfModel.setAttribute('scale', '0.01 0.01 0.01');
         } else if (fallbackModel) {
           messageSpan.textContent = '✅ Fallback model found! Point at target to see it.';
           console.log('✅ Fallback model exists in DOM:', fallbackModel);
@@ -133,13 +133,13 @@
 
         if (gltfModel) {
           gltfModel.addEventListener('model-loaded', () => {
-            console.log('✅ GLB model loaded successfully');
-            messageSpan.textContent = 'GLB Baby model loaded! Point camera at target.';
+            console.log('✅ FBX baby waving model loaded successfully');
+            messageSpan.textContent = 'Baby Waving model loaded! Point camera at target.';
           });
 
           gltfModel.addEventListener('model-error', (event) => {
-            console.log('❌ GLB model failed to load:', event.detail);
-            messageSpan.textContent = 'GLB failed. Using fallback model.';
+            console.log('❌ FBX model failed to load:', event.detail);
+            messageSpan.textContent = 'FBX failed. Using fallback model.';
             if (fallbackModel) {
               fallbackModel.setAttribute('visible', 'true');
             }
