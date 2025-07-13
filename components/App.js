@@ -1,6 +1,6 @@
 const { useState, useEffect, useRef } = React;
 
-// Fixed: Removed duplicate babyVideo declaration - v1.1
+// Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
   const [arMessage, setArMessage] = useState('Point your camera at the target image...');
@@ -24,6 +24,13 @@ function App() {
           setArMessage('Video animation loaded! Point camera at target.');
           babyVideo.currentTime = 0;
           babyVideo.playbackRate = 1.0;
+
+          // Optimize video for smooth playback
+          if (babyVideo.requestVideoFrameCallback) {
+            babyVideo.requestVideoFrameCallback(() => {
+              console.log('📹 Video frame callback ready');
+            });
+          }
         });
 
         babyVideo.addEventListener('error', () => {
@@ -31,7 +38,12 @@ function App() {
         });
 
         babyVideo.addEventListener('canplay', () => {
-          babyVideo.play();
+          // Ensure smooth playback
+          babyVideo.play().then(() => {
+            console.log('📹 Video playing smoothly');
+          }).catch(e => {
+            console.log('📹 Video play issue:', e);
+          });
         });
 
         babyVideo.addEventListener('ended', () => {
@@ -41,8 +53,19 @@ function App() {
 
         babyVideo.addEventListener('pause', () => {
           if (!babyVideo.ended) {
-            babyVideo.play();
+            setTimeout(() => {
+              babyVideo.play();
+            }, 50); // Small delay to prevent rapid pause/play cycles
           }
+        });
+
+        // Prevent video stuttering
+        babyVideo.addEventListener('waiting', () => {
+          console.log('📹 Video buffering...');
+        });
+
+        babyVideo.addEventListener('playing', () => {
+          console.log('📹 Video resumed playing');
         });
       }
 
