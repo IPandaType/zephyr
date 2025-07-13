@@ -3,8 +3,9 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('Point your camera at the target image...');
+  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Find the hidden bear 🐻 and raccoon 🦝 characters!');
   const [showControls, setShowControls] = useState(true);
+  const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -79,21 +80,34 @@ function App() {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Listen for AR target found/lost events
-      const targetEntity = document.querySelector('[mindar-image-target]');
-      if (targetEntity) {
-        targetEntity.addEventListener('targetFound', () => {
-          console.log('🎯 Target found! Model should be visible now.');
-          setArMessage('🎯 Surprise!!! Mark your calendars! My debut is January 2026 📅👣"');
-          setShowControls(true);
-        });
+      // Listen for AR target found/lost events for multiple targets
+      setTimeout(() => {
+        const targetEntities = document.querySelectorAll('[mindar-image-target]');
+        targetEntities.forEach((targetEntity, index) => {
+          targetEntity.addEventListener('targetFound', () => {
+            console.log(`🎯 Target ${index} found!`);
 
-        targetEntity.addEventListener('targetLost', () => {
-          console.log('❌ Target lost. Point camera back at the image.');
-          setArMessage('❌ Target lost. Point camera at the image again.');
-          setShowControls(true);
+            if (index === 0) {
+              setArMessage('🦝 You found the Raccoon! Keep looking for the bear 🐻');
+              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+            } else if (index === 1) {
+              setArMessage('🐻 You found the Bear! Keep looking for the raccoon 🦝');
+              setFoundCharacters(prev => ({ ...prev, bear: true }));
+            } else if (index === 2) {
+              setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
+              setFoundCharacters(prev => ({ ...prev, baby: true }));
+            }
+
+            setShowControls(true);
+          });
+
+          targetEntity.addEventListener('targetLost', () => {
+            console.log(`❌ Target ${index} lost.`);
+            setArMessage('🎮 Keep searching for the hidden characters!');
+            setShowControls(true);
+          });
         });
-      }
+      }, 2000);
 
 
     };

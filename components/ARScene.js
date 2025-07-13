@@ -9,7 +9,7 @@ function ARScene({ sceneRef, videoRef }) {
 
   const sceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'mindar-image': 'imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/band.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
     'vr-mode-ui': 'enabled: false',
@@ -50,6 +50,15 @@ function ARAssets({ videoRef }) {
       src: 'bayko.jpeg',
       alt: 'AR Target',
       crossOrigin: 'anonymous'
+    }),
+    // 3D Character Models
+    React.createElement('a-asset-item', {
+      id: 'bearModel',
+      src: 'https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/bear/scene.gltf'
+    }),
+    React.createElement('a-asset-item', {
+      id: 'raccoonModel',
+      src: 'https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/raccoon/scene.gltf'
     })
   );
 }
@@ -62,10 +71,33 @@ function ARCamera() {
 }
 
 function ARTarget() {
-  return React.createElement('a-entity', { 
-    'mindar-image-target': 'targetIndex: 0' 
-  },
-    React.createElement(VideoPlane)
+  return React.createElement('a-entity', null,
+    // Target 0: Raccoon character
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
+      React.createElement('a-gltf-model', {
+        rotation: '0 0 0',
+        position: '0 -0.25 0',
+        scale: '0.05 0.05 0.05',
+        src: '#raccoonModel',
+        'animation-mixer': ''
+      })
+    ),
+
+    // Target 1: Bear character
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 1' },
+      React.createElement('a-gltf-model', {
+        rotation: '0 0 0',
+        position: '0 -0.25 0',
+        scale: '0.05 0.05 0.05',
+        src: '#bearModel',
+        'animation-mixer': ''
+      })
+    ),
+
+    // Target 2: Baby video (your wife's photo - we'll update this)
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 2' },
+      React.createElement(VideoPlane)
+    )
   );
 }
 
