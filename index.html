@@ -14,10 +14,10 @@
       <br>
       <button onclick="showSuccess()" style="margin-top:5px;padding:5px;background:#4CAF50;color:white;">Test AR Working</button>
       <br>
-      <button onclick="scaleModel(0.01)" style="margin-top:5px;padding:5px;">Smaller</button>
-      <button onclick="scaleModel(0.02)" style="margin-top:5px;padding:5px;">Small</button>
-      <button onclick="scaleModel(0.05)" style="margin-top:5px;padding:5px;">Medium</button>
-      <button onclick="scaleModel(0.1)" style="margin-top:5px;padding:5px;">Large</button>
+      <button onclick="scaleModel(0.003)" style="margin-top:5px;padding:5px;">Tiny</button>
+      <button onclick="scaleModel(0.005)" style="margin-top:5px;padding:5px;">Small</button>
+      <button onclick="scaleModel(0.01)" style="margin-top:5px;padding:5px;">Medium</button>
+      <button onclick="scaleModel(0.02)" style="margin-top:5px;padding:5px;">Large</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -36,7 +36,7 @@
         <a-gltf-model id="baby-gltf"
                       src="#babyModel"
                       position="0 0 0"
-                      scale="0.02 0.02 0.02"
+                      scale="0.005 0.005 0.005"
                       rotation="0 0 0"
                       animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
                       animation-mixer></a-gltf-model>
