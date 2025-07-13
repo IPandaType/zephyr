@@ -18,6 +18,10 @@
       <button onclick="scaleModel(0.005)" style="margin-top:5px;padding:5px;">Small</button>
       <button onclick="scaleModel(0.01)" style="margin-top:5px;padding:5px;">Medium</button>
       <button onclick="scaleModel(0.02)" style="margin-top:5px;padding:5px;">Large</button>
+      <br>
+      <button onclick="positionModel(0, -0.2, 0)" style="margin-top:5px;padding:5px;">Above Logo</button>
+      <button onclick="positionModel(0, -0.3, 0)" style="margin-top:5px;padding:5px;">Below Logo</button>
+      <button onclick="positionModel(0, -0.5, 0)" style="margin-top:5px;padding:5px;">Far Below</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -35,10 +39,9 @@
         <!-- GLB Baby Model with fallback -->
         <a-gltf-model id="baby-gltf"
                       src="#babyModel"
-                      position="0 0 0"
+                      position="0 -0.3 0"
                       scale="0.005 0.005 0.005"
                       rotation="0 0 0"
-                      animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
                       animation-mixer></a-gltf-model>
 
         <!-- Fallback geometric model (hidden by default) -->
@@ -89,6 +92,16 @@
           gltfModel.setAttribute('scale', `${newScale} ${newScale} ${newScale}`);
           messageSpan.textContent = `Model scaled to ${newScale}. Point camera at target.`;
           console.log(`🔧 Model scaled to: ${newScale}`);
+        }
+      }
+
+      // Function to adjust model position
+      function positionModel(x, y, z) {
+        const gltfModel = document.querySelector('#baby-gltf');
+        if (gltfModel) {
+          gltfModel.setAttribute('position', `${x} ${y} ${z}`);
+          messageSpan.textContent = `Model positioned at Y: ${y}. Point camera at target.`;
+          console.log(`📍 Model positioned at: ${x}, ${y}, ${z}`);
         }
       }
 
