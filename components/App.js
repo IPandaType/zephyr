@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('🎮 Look around for the bear 🐻 and raccoon 🦝! Point camera at bayko.jpeg for a surprise! 👶');
+  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Look around for the hidden bear 🐻 and raccoon 🦝!');
   const [showControls, setShowControls] = useState(true);
   const sceneRef = useRef(null);
   const videoRef = useRef(null);
@@ -79,6 +79,32 @@ function App() {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
+      // Check if 3D models are loading
+      setTimeout(() => {
+        const raccoonModel = document.querySelector('[src="#raccoonModel"]');
+        const bearModel = document.querySelector('[src="#bearModel"]');
+        console.log('🦝 Raccoon model found:', !!raccoonModel);
+        console.log('🐻 Bear model found:', !!bearModel);
+
+        if (raccoonModel) {
+          raccoonModel.addEventListener('model-loaded', () => {
+            console.log('🦝 Raccoon model loaded successfully!');
+          });
+          raccoonModel.addEventListener('model-error', (event) => {
+            console.log('🦝 Raccoon model failed to load:', event);
+          });
+        }
+
+        if (bearModel) {
+          bearModel.addEventListener('model-loaded', () => {
+            console.log('🐻 Bear model loaded successfully!');
+          });
+          bearModel.addEventListener('model-error', (event) => {
+            console.log('🐻 Bear model failed to load:', event);
+          });
+        }
+      }, 3000);
+
       // Listen for AR target found/lost events
       const targetEntity = document.querySelector('[mindar-image-target]');
       if (targetEntity) {
@@ -89,8 +115,8 @@ function App() {
         });
 
         targetEntity.addEventListener('targetLost', () => {
-          console.log('❌ Target lost. Point camera back at bayko.jpeg.');
-          setArMessage('🎮 Look around for the bear 🐻 and raccoon 🦝! Point camera at bayko.jpeg for a surprise! 👶');
+          console.log('❌ Target lost.');
+          setArMessage('🎮 Keep looking around for the hidden bear 🐻 and raccoon 🦝!');
           setShowControls(true);
         });
       }
