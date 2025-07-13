@@ -47,7 +47,7 @@
                  position="0 -0.3 0"
                  width="1.0"
                  height="1.0"
-                 rotation="0 0 0"
+                 rotation="15 0 0"
                  material="transparent: true; shader: flat"></a-plane>
       </a-entity>
     </a-scene>
@@ -96,6 +96,15 @@
         if (animationPlane) {
           animationPlane.setAttribute('position', `${x} ${y} ${z}`);
           messageSpan.textContent = `Animation positioned at Y: ${y}. Point camera at target.`;
+        }
+      }
+
+      // Function to adjust tilt angle
+      function adjustTilt(angle) {
+        const animationPlane = document.querySelector('#baby-animation-plane');
+        if (animationPlane) {
+          animationPlane.setAttribute('rotation', `${angle} 0 0`);
+          messageSpan.textContent = `Tilt adjusted to ${angle} degrees. Point camera at target.`;
         }
       }
 
