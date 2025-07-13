@@ -69,22 +69,67 @@ function App() {
         });
       }
 
-      // Listen for camera events
+      // Listen for camera events and inject characters after AR is ready
       window.addEventListener('camera-init', () => {
         setArMessage('🎮 AR Treasure Hunt! Look around for the hidden bear 🐻 and raccoon 🦝!');
         setTimeout(() => setShowControls(false), 5000);
 
-        // Ensure characters are visible after camera starts
+        // Dynamically inject characters after camera is ready
         setTimeout(() => {
-          const allCharacters = document.querySelectorAll('[src="#raccoonModel"], [src="#bearModel"]');
-          console.log('📷 Camera ready - making characters visible:', allCharacters.length);
-          allCharacters.forEach((model, index) => {
-            console.log(`📷 Making character ${index} visible after camera init`);
-            model.setAttribute('visible', 'true');
-            model.parentElement.setAttribute('visible', 'true');
-          });
-        }, 2000);
+          console.log('📷 Camera ready - injecting characters...');
+          injectCharacters();
+        }, 3000);
       });
+
+      // Function to dynamically add characters to the scene
+      const injectCharacters = () => {
+        const scene = document.querySelector('a-scene');
+        if (!scene) {
+          console.log('❌ Scene not found');
+          return;
+        }
+
+        console.log('🎯 Injecting characters into scene...');
+
+        // Create test box
+        const testBox = document.createElement('a-box');
+        testBox.setAttribute('position', '0 1 -2');
+        testBox.setAttribute('scale', '0.3 0.3 0.3');
+        testBox.setAttribute('color', 'yellow');
+        testBox.setAttribute('visible', 'true');
+        testBox.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 3000; loop: true');
+        scene.appendChild(testBox);
+
+        // Create raccoon
+        const raccoonEntity = document.createElement('a-entity');
+        raccoonEntity.setAttribute('position', '2 0 -3');
+        raccoonEntity.setAttribute('visible', 'true');
+
+        const raccoonModel = document.createElement('a-gltf-model');
+        raccoonModel.setAttribute('src', '#raccoonModel');
+        raccoonModel.setAttribute('scale', '0.2 0.2 0.2');
+        raccoonModel.setAttribute('rotation', '0 45 0');
+        raccoonModel.setAttribute('animation-mixer', '');
+        raccoonModel.setAttribute('animation', 'property: rotation; to: 0 405 0; dur: 10000; loop: true');
+        raccoonEntity.appendChild(raccoonModel);
+        scene.appendChild(raccoonEntity);
+
+        // Create bear
+        const bearEntity = document.createElement('a-entity');
+        bearEntity.setAttribute('position', '-2 0 -3');
+        bearEntity.setAttribute('visible', 'true');
+
+        const bearModel = document.createElement('a-gltf-model');
+        bearModel.setAttribute('src', '#bearModel');
+        bearModel.setAttribute('scale', '0.2 0.2 0.2');
+        bearModel.setAttribute('rotation', '0 -45 0');
+        bearModel.setAttribute('animation-mixer', '');
+        bearModel.setAttribute('animation', 'property: rotation; to: 0 -405 0; dur: 8000; loop: true');
+        bearEntity.appendChild(bearModel);
+        scene.appendChild(bearEntity);
+
+        console.log('✅ Characters injected successfully!');
+      };
 
       window.addEventListener('camera-error', () => {
         setArMessage('Camera access denied. Please allow camera access.');

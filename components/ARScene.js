@@ -67,45 +67,7 @@ function ARCamera() {
   return React.createElement('a-camera', {
     position: '0 0 0',
     'look-controls': 'enabled: false'
-  },
-    // Attach characters directly to camera so they're always visible
-    React.createElement('a-entity', {
-      position: '2 -0.5 -3',
-      visible: true
-    },
-      React.createElement('a-gltf-model', {
-        rotation: '0 45 0',
-        position: '0 0 0',
-        scale: '0.2 0.2 0.2',
-        src: '#raccoonModel',
-        'animation-mixer': '',
-        'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true'
-      })
-    ),
-
-    React.createElement('a-entity', {
-      position: '-2 -0.5 -3',
-      visible: true
-    },
-      React.createElement('a-gltf-model', {
-        rotation: '0 -45 0',
-        position: '0 0 0',
-        scale: '0.2 0.2 0.2',
-        src: '#bearModel',
-        'animation-mixer': '',
-        'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true'
-      })
-    ),
-
-    // Test box attached to camera
-    React.createElement('a-box', {
-      position: '0 1 -2',
-      scale: '0.2 0.2 0.2',
-      color: 'green',
-      visible: true,
-      'animation': 'property: rotation; to: 0 360 0; dur: 3000; loop: true'
-    })
-  );
+  });
 }
 
 function ARTarget() {
