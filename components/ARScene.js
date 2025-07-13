@@ -82,49 +82,62 @@ function ARTarget() {
 
 // Random floating 3D characters that appear anywhere in the scene
 function RandomCharacters() {
-  return React.createElement('a-entity', null,
-    // Raccoon - positioned further back and smaller scale
+  return React.createElement('a-entity', {
+    id: 'persistent-characters',
+    visible: true
+  },
+    // Simple test boxes first to see if positioning works
+    React.createElement('a-box', {
+      position: '1.5 0 -2',
+      scale: '0.3 0.3 0.3',
+      color: 'red',
+      visible: true,
+      material: 'shader: flat; depthTest: false',
+      'render-order': '999'
+    }),
+
+    React.createElement('a-box', {
+      position: '-1.5 0 -2',
+      scale: '0.3 0.3 0.3',
+      color: 'blue',
+      visible: true,
+      material: 'shader: flat; depthTest: false',
+      'render-order': '999'
+    }),
+
+    // Raccoon - with persistent properties
     React.createElement('a-entity', {
       position: '2 0 -3',
-      visible: true
+      visible: true,
+      'render-order': '999'
     },
       React.createElement('a-gltf-model', {
         rotation: '0 45 0',
         position: '0 0 0',
-        scale: '0.15 0.15 0.15',
+        scale: '0.2 0.2 0.2',
         src: '#raccoonModel',
         'animation-mixer': '',
-        'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true'
+        'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true',
+        visible: true,
+        'render-order': '999'
       })
     ),
 
-    // Bear - positioned further back and smaller scale
+    // Bear - with persistent properties
     React.createElement('a-entity', {
       position: '-2 0.5 -3',
-      visible: true
+      visible: true,
+      'render-order': '999'
     },
       React.createElement('a-gltf-model', {
         rotation: '0 -45 0',
         position: '0 0 0',
-        scale: '0.15 0.15 0.15',
+        scale: '0.2 0.2 0.2',
         src: '#bearModel',
         'animation-mixer': '',
-        'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true'
-      })
-    ),
-
-    // Additional raccoon floating higher
-    React.createElement('a-entity', {
-      position: '0 1.5 -4',
-      visible: true
-    },
-      React.createElement('a-gltf-model', {
-        rotation: '0 180 0',
-        position: '0 0 0',
-        scale: '0.1 0.1 0.1',
-        src: '#raccoonModel',
-        'animation-mixer': '',
-        'animation': 'property: position; to: 0.5 1.5 -4; dir: alternate; dur: 5000; loop: true'
+        'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true',
+        visible: true,
+        'render-order': '999'
       })
     )
   );
