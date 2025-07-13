@@ -1,15 +1,19 @@
 function ARScene({ sceneRef, videoRef }) {
-  return React.createElement('a-scene', {
-    ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: targets.mind; autoStart: true;',
-    'color-space': 'sRGB',
-    renderer: 'colorManagement: true, physicallyCorrectLights',
-    'vr-mode-ui': 'enabled: false',
-    'device-orientation-permission-ui': 'enabled: true'
-  },
-    React.createElement(ARAssets, { videoRef }),
-    React.createElement(ARCamera),
-    React.createElement(ARTarget)
+  const { ARSceneWrapper } = window.StyledComponents;
+
+  return React.createElement(ARSceneWrapper, null,
+    React.createElement('a-scene', {
+      ref: sceneRef,
+      'mindar-image': 'imageTargetSrc: targets.mind; autoStart: true;',
+      'color-space': 'sRGB',
+      renderer: 'colorManagement: true, physicallyCorrectLights',
+      'vr-mode-ui': 'enabled: false',
+      'device-orientation-permission-ui': 'enabled: true'
+    },
+      React.createElement(ARAssets, { videoRef }),
+      React.createElement(ARCamera),
+      React.createElement(ARTarget)
+    )
   );
 }
 

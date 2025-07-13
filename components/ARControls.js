@@ -1,13 +1,17 @@
 function ARControls({ arMessage, showControls, onScaleAnimation }) {
-  return React.createElement('div', { 
-    className: `ar-controls ${showControls ? 'visible' : ''}` 
+  const { ARControlsContainer, ARMessage } = window.StyledComponents;
+
+  return React.createElement(ARControlsContainer, {
+    visible: showControls
   },
-    React.createElement('span', { className: 'ar-message' }, arMessage),
+    React.createElement(ARMessage, null, arMessage),
     React.createElement(ScaleButtons, { onScaleAnimation })
   );
 }
 
 function ScaleButtons({ onScaleAnimation }) {
+  const { ControlButtonsContainer, ControlButton } = window.StyledComponents;
+
   const scaleOptions = [
     { label: 'Small', value: 0.7 },
     { label: 'Medium', value: 1.0 },
@@ -15,12 +19,11 @@ function ScaleButtons({ onScaleAnimation }) {
     { label: 'Extra Large', value: 1.50 }
   ];
 
-  return React.createElement('div', { className: 'control-buttons' },
+  return React.createElement(ControlButtonsContainer, null,
     ...scaleOptions.map(option =>
-      React.createElement('button', {
+      React.createElement(ControlButton, {
         key: option.label,
-        onClick: () => onScaleAnimation(option.value),
-        className: 'control-btn'
+        onClick: () => onScaleAnimation(option.value)
       }, option.label)
     )
   );

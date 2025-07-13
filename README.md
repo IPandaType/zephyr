@@ -7,12 +7,13 @@ Your AR app is now a complete React application with all original functionality 
 
 ## Features
 - ⚛️ **React 18** - Modern React with hooks and functional components
+- 💅 **Styled Components** - CSS-in-JS styling with dynamic theming
 - 📱 **Mobile AR** - MindAR integration for reliable AR tracking
 - 🎯 **Image Recognition** - Detects bayko.jpeg target image
 - 🎬 **Video Animation** - Smooth baby.mp4 video playback
-- 🎮 **Interactive Controls** - Scale adjustment buttons
+- 🎮 **Interactive Controls** - Scale adjustment buttons with hover effects
 - 📱 **Responsive Design** - Optimized for mobile devices
-- 🎨 **Clean UI** - Professional interface with bottom controls
+- 🎨 **Modern UI** - Glassmorphism design with backdrop blur effects
 
 ## 🚀 Quick Start
 
@@ -36,15 +37,16 @@ npx serve .
 4. Watch your baby video animation appear below the logo!
 5. Use the scale buttons to adjust size
 
-## 📁 Modular React Structure
+## 📁 Styled Components Architecture
 ```
 zephyr-ar-app/
 ├── index.html            # Main HTML file with React setup
 ├── components/
 │   ├── App.js           # Main React component with state management
 │   ├── ARControls.js    # Control buttons and UI components
-│   └── ARScene.js       # A-Frame AR scene components
-├── baby2.mp4            # Baby video animation
+│   ├── ARScene.js       # A-Frame AR scene components
+│   └── StyledComponents.js # Styled-components definitions
+├── baby.mp4             # Baby video animation
 ├── bayko.jpeg           # AR target image
 ├── targets.mind         # MindAR recognition data
 └── README.md            # This file

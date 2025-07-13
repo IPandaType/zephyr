@@ -78,15 +78,17 @@ function App() {
     }
   };
 
-  return React.createElement('div', { className: 'App' },
-    React.createElement(ARControls, { 
-      arMessage, 
-      showControls, 
-      onScaleAnimation: scaleAnimation 
+  const { AppContainer } = window.StyledComponents;
+
+  return React.createElement(AppContainer, null,
+    React.createElement(ARControls, {
+      arMessage,
+      showControls,
+      onScaleAnimation: scaleAnimation
     }),
-    React.createElement(ARScene, { 
-      sceneRef, 
-      videoRef 
+    React.createElement(ARScene, {
+      sceneRef,
+      videoRef
     })
   );
 }
