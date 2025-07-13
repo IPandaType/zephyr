@@ -34,21 +34,28 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- Local baby video animation -->
-        <video id="baby-video" src="baby2.mp4" autoplay loop muted playsinline crossorigin="anonymous"></video>
+        <!-- Local baby video animation - optimized for smooth playback -->
+        <video id="baby-video"
+               src="baby2.mp4"
+               autoplay
+               loop
+               muted
+               playsinline
+               preload="auto"
+               crossorigin="anonymous"
+               style="object-fit: cover;"></video>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Video animation plane - your baby.mp4 file (upright) -->
+        <!-- Video animation plane - your baby2.mp4 file (upright, stable) -->
         <a-plane id="baby-animation-plane"
                  src="#baby-video"
                  position="0 -0.3 0"
                  width="0.5"
                  height="0.5"
                  rotation="0 0 0"
-                 material="transparent: true; shader: flat"
-                 animation="property: scale; to: 1.05 1.05 1.05; dir: alternate; dur: 3000; loop: true"></a-plane>
+                 material="transparent: true; shader: flat"></a-plane>
       </a-entity>
     </a-scene>
     <script>
@@ -133,14 +140,19 @@
         }
       }
 
-      // Video animation loading check
+      // Enhanced video loading and smooth playback
       document.addEventListener('DOMContentLoaded', () => {
         const babyVideo = document.querySelector('#baby-video');
 
         if (babyVideo) {
+          // Ensure smooth looping
           babyVideo.addEventListener('loadeddata', () => {
             console.log('✅ Baby video loaded successfully');
             messageSpan.textContent = 'Video animation loaded! Point camera at target.';
+
+            // Set video properties for smooth playback
+            babyVideo.currentTime = 0;
+            babyVideo.playbackRate = 1.0;
           });
 
           babyVideo.addEventListener('error', (event) => {
@@ -151,6 +163,19 @@
           babyVideo.addEventListener('canplay', () => {
             console.log('✅ Video ready to play');
             babyVideo.play().catch(e => console.log('Video autoplay prevented:', e));
+          });
+
+          // Ensure seamless looping
+          babyVideo.addEventListener('ended', () => {
+            babyVideo.currentTime = 0;
+            babyVideo.play();
+          });
+
+          // Handle any playback interruptions
+          babyVideo.addEventListener('pause', () => {
+            if (!babyVideo.ended) {
+              babyVideo.play().catch(e => console.log('Resume play failed:', e));
+            }
           });
         }
       });
