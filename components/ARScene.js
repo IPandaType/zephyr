@@ -83,42 +83,48 @@ function ARTarget() {
 // Random floating 3D characters that appear anywhere in the scene
 function RandomCharacters() {
   return React.createElement('a-entity', null,
-    // Test box to see if this component is working
-    React.createElement('a-box', {
-      position: '0 1 -1',
-      scale: '0.2 0.2 0.2',
-      color: 'yellow',
-      visible: true,
-      'animation': 'property: rotation; to: 0 360 0; dur: 3000; loop: true'
-    }),
-
-    // Raccoon - closer and larger for visibility
+    // Raccoon - positioned further back and smaller scale
     React.createElement('a-entity', {
-      position: '1 0 -1.5',
+      position: '2 0 -3',
       visible: true
     },
       React.createElement('a-gltf-model', {
         rotation: '0 45 0',
         position: '0 0 0',
-        scale: '0.5 0.5 0.5',
+        scale: '0.15 0.15 0.15',
         src: '#raccoonModel',
         'animation-mixer': '',
         'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true'
       })
     ),
 
-    // Bear - closer and larger for visibility
+    // Bear - positioned further back and smaller scale
     React.createElement('a-entity', {
-      position: '-1 0 -1.5',
+      position: '-2 0.5 -3',
       visible: true
     },
       React.createElement('a-gltf-model', {
         rotation: '0 -45 0',
         position: '0 0 0',
-        scale: '0.5 0.5 0.5',
+        scale: '0.15 0.15 0.15',
         src: '#bearModel',
         'animation-mixer': '',
         'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true'
+      })
+    ),
+
+    // Additional raccoon floating higher
+    React.createElement('a-entity', {
+      position: '0 1.5 -4',
+      visible: true
+    },
+      React.createElement('a-gltf-model', {
+        rotation: '0 180 0',
+        position: '0 0 0',
+        scale: '0.1 0.1 0.1',
+        src: '#raccoonModel',
+        'animation-mixer': '',
+        'animation': 'property: position; to: 0.5 1.5 -4; dir: alternate; dur: 5000; loop: true'
       })
     )
   );
