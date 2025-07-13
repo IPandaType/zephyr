@@ -3,8 +3,9 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Look around for the hidden bear 🐻 and raccoon 🦝!');
+  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Find the left hand 🤚 for raccoon, right hand ✋ for bear!');
   const [showControls, setShowControls] = useState(true);
+  const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -69,118 +70,69 @@ function App() {
         });
       }
 
-      // Listen for camera events and inject characters after AR is ready
+      // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('🎮 AR Treasure Hunt! Look around for the hidden bear 🐻 and raccoon 🦝!');
+        setArMessage('🎮 AR Treasure Hunt! Find the left hand 🤚 for raccoon, right hand ✋ for bear!');
         setTimeout(() => setShowControls(false), 5000);
-
-        // Dynamically inject characters after camera is ready
-        setTimeout(() => {
-          console.log('📷 Camera ready - injecting characters...');
-          injectCharacters();
-        }, 3000);
       });
-
-      // Function to dynamically add characters to the scene
-      const injectCharacters = () => {
-        const scene = document.querySelector('a-scene');
-        if (!scene) {
-          console.log('❌ Scene not found');
-          return;
-        }
-
-        console.log('🎯 Injecting characters into scene...');
-
-        // Create test box
-        const testBox = document.createElement('a-box');
-        testBox.setAttribute('position', '0 1 -2');
-        testBox.setAttribute('scale', '0.3 0.3 0.3');
-        testBox.setAttribute('color', 'yellow');
-        testBox.setAttribute('visible', 'true');
-        testBox.setAttribute('animation', 'property: rotation; to: 0 360 0; dur: 3000; loop: true');
-        scene.appendChild(testBox);
-
-        // Create raccoon
-        const raccoonEntity = document.createElement('a-entity');
-        raccoonEntity.setAttribute('position', '2 0 -3');
-        raccoonEntity.setAttribute('visible', 'true');
-
-        const raccoonModel = document.createElement('a-gltf-model');
-        raccoonModel.setAttribute('src', '#raccoonModel');
-        raccoonModel.setAttribute('scale', '0.2 0.2 0.2');
-        raccoonModel.setAttribute('rotation', '0 45 0');
-        raccoonModel.setAttribute('animation-mixer', '');
-        raccoonModel.setAttribute('animation', 'property: rotation; to: 0 405 0; dur: 10000; loop: true');
-        raccoonEntity.appendChild(raccoonModel);
-        scene.appendChild(raccoonEntity);
-
-        // Create bear
-        const bearEntity = document.createElement('a-entity');
-        bearEntity.setAttribute('position', '-2 0 -3');
-        bearEntity.setAttribute('visible', 'true');
-
-        const bearModel = document.createElement('a-gltf-model');
-        bearModel.setAttribute('src', '#bearModel');
-        bearModel.setAttribute('scale', '0.2 0.2 0.2');
-        bearModel.setAttribute('rotation', '0 -45 0');
-        bearModel.setAttribute('animation-mixer', '');
-        bearModel.setAttribute('animation', 'property: rotation; to: 0 -405 0; dur: 8000; loop: true');
-        bearEntity.appendChild(bearModel);
-        scene.appendChild(bearEntity);
-
-        console.log('✅ Characters injected successfully!');
-      };
 
       window.addEventListener('camera-error', () => {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Wait for AR to initialize, then ensure characters are visible
+      // Listen for AR target events from all scenes
       setTimeout(() => {
-        const raccoonModels = document.querySelectorAll('[src="#raccoonModel"]');
-        const bearModels = document.querySelectorAll('[src="#bearModel"]');
-        console.log('🦝 Raccoon models found:', raccoonModels.length);
-        console.log('🐻 Bear models found:', bearModels.length);
+        // Baby scene target events
+        const babyTargets = document.querySelectorAll('#baby-scene [mindar-image-target]');
+        babyTargets.forEach(target => {
+          target.addEventListener('targetFound', () => {
+            console.log('👶 Baby target found!');
+            setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
+            setFoundCharacters(prev => ({ ...prev, baby: true }));
+            setShowControls(true);
+          });
 
-        // Force visibility of all character models
-        raccoonModels.forEach((model, index) => {
-          console.log(`🦝 Making raccoon ${index} visible`);
-          model.setAttribute('visible', 'true');
-          model.parentElement.setAttribute('visible', 'true');
-
-          model.addEventListener('model-loaded', () => {
-            console.log(`🦝 Raccoon ${index} model loaded successfully!`);
-            model.setAttribute('visible', 'true');
+          target.addEventListener('targetLost', () => {
+            console.log('👶 Baby target lost');
+            setArMessage('🎮 Keep searching for hand targets!');
+            setShowControls(true);
           });
         });
 
-        bearModels.forEach((model, index) => {
-          console.log(`🐻 Making bear ${index} visible`);
-          model.setAttribute('visible', 'true');
-          model.parentElement.setAttribute('visible', 'true');
+        // Raccoon scene target events
+        const raccoonTargets = document.querySelectorAll('#raccoon-scene [mindar-image-target]');
+        raccoonTargets.forEach(target => {
+          target.addEventListener('targetFound', () => {
+            console.log('🦝 Raccoon target found!');
+            setArMessage('🦝 You found the Raccoon! Look for the right hand ✋ to find the bear!');
+            setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+            setShowControls(true);
+          });
 
-          model.addEventListener('model-loaded', () => {
-            console.log(`🐻 Bear ${index} model loaded successfully!`);
-            model.setAttribute('visible', 'true');
+          target.addEventListener('targetLost', () => {
+            console.log('🦝 Raccoon target lost');
+            setArMessage('🎮 Keep searching for hand targets!');
+            setShowControls(true);
           });
         });
-      }, 5000);
 
-      // Listen for AR target found/lost events
-      const targetEntity = document.querySelector('[mindar-image-target]');
-      if (targetEntity) {
-        targetEntity.addEventListener('targetFound', () => {
-          console.log('🎯 Target found! Baby animation should be visible now.');
-          setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
-          setShowControls(true);
-        });
+        // Bear scene target events
+        const bearTargets = document.querySelectorAll('#bear-scene [mindar-image-target]');
+        bearTargets.forEach(target => {
+          target.addEventListener('targetFound', () => {
+            console.log('🐻 Bear target found!');
+            setArMessage('🐻 You found the Bear! Look for the left hand 🤚 to find the raccoon!');
+            setFoundCharacters(prev => ({ ...prev, bear: true }));
+            setShowControls(true);
+          });
 
-        targetEntity.addEventListener('targetLost', () => {
-          console.log('❌ Target lost.');
-          setArMessage('🎮 Keep looking around for the hidden bear 🐻 and raccoon 🦝!');
-          setShowControls(true);
+          target.addEventListener('targetLost', () => {
+            console.log('🐻 Bear target lost');
+            setArMessage('🎮 Keep searching for hand targets!');
+            setShowControls(true);
+          });
         });
-      }
+      }, 3000);
 
 
     };

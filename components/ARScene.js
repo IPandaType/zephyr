@@ -7,24 +7,34 @@ function ARScene({ sceneRef, videoRef }) {
     position: 'relative'
   };
 
-  const sceneElement = React.createElement('a-scene', {
+  // We'll create separate scenes for each target type
+  const babySceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'mindar-image': 'imageTargetSrc: assets/targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
     'vr-mode-ui': 'enabled: false',
-    'device-orientation-permission-ui': 'enabled: true'
+    'device-orientation-permission-ui': 'enabled: true',
+    id: 'baby-scene'
   },
     React.createElement(ARAssets, { videoRef }),
     React.createElement(ARCamera),
-    React.createElement(ARTarget)
+    React.createElement(BabyTarget)
   );
 
   if (!ARSceneWrapper) {
-    return React.createElement('div', { style: fallbackWrapperStyle }, sceneElement);
+    return React.createElement('div', { style: fallbackWrapperStyle },
+      babySceneElement,
+      React.createElement(RaccoonScene),
+      React.createElement(BearScene)
+    );
   }
 
-  return React.createElement(ARSceneWrapper, null, sceneElement);
+  return React.createElement(ARSceneWrapper, null,
+    babySceneElement,
+    React.createElement(RaccoonScene),
+    React.createElement(BearScene)
+  );
 }
 
 
@@ -33,7 +43,7 @@ function ARAssets({ videoRef }) {
     React.createElement('video', {
       id: 'baby-video',
       ref: videoRef,
-      src: 'baby.mp4',
+      src: 'assets/baby.mp4',
       autoPlay: true,
       loop: true,
       muted: true,
@@ -46,9 +56,21 @@ function ARAssets({ videoRef }) {
       'data-object-fit': 'cover'
     }),
     React.createElement('img', {
-      id: 'target-image',
-      src: 'bayko.jpeg',
-      alt: 'AR Target',
+      id: 'baby-target-image',
+      src: 'assets/bayko.jpeg',
+      alt: 'Baby AR Target',
+      crossOrigin: 'anonymous'
+    }),
+    React.createElement('img', {
+      id: 'lefthand-target-image',
+      src: 'assets/lefthand.jpeg',
+      alt: 'Left Hand AR Target',
+      crossOrigin: 'anonymous'
+    }),
+    React.createElement('img', {
+      id: 'righthand-target-image',
+      src: 'assets/righthand.jpeg',
+      alt: 'Right Hand AR Target',
       crossOrigin: 'anonymous'
     }),
     // 3D Character Models
@@ -70,77 +92,79 @@ function ARCamera() {
   });
 }
 
-function ARTarget() {
-  return React.createElement('a-entity', null,
-    // Target 0: Baby video (bayko.jpeg from targets.mind)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
-      React.createElement(VideoPlane)
-    )
+function BabyTarget() {
+  return React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
+    React.createElement(VideoPlane)
   );
 }
 
-// Random floating 3D characters that appear anywhere in the scene
-function RandomCharacters() {
-  return React.createElement('a-entity', {
-    id: 'persistent-characters',
-    visible: true
+function RaccoonScene() {
+  return React.createElement('a-scene', {
+    'mindar-image': 'imageTargetSrc: assets/lefthand.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'color-space': 'sRGB',
+    renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
+    'vr-mode-ui': 'enabled: false',
+    'device-orientation-permission-ui': 'enabled: true',
+    embedded: true,
+    id: 'raccoon-scene',
+    style: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 2 }
   },
-    // Simple test boxes first to see if positioning works
-    React.createElement('a-box', {
-      position: '1.5 0 -2',
-      scale: '0.3 0.3 0.3',
-      color: 'red',
-      visible: true,
-      material: 'shader: flat; depthTest: false',
-      'render-order': '999'
-    }),
-
-    React.createElement('a-box', {
-      position: '-1.5 0 -2',
-      scale: '0.3 0.3 0.3',
-      color: 'blue',
-      visible: true,
-      material: 'shader: flat; depthTest: false',
-      'render-order': '999'
-    }),
-
-    // Raccoon - with persistent properties
-    React.createElement('a-entity', {
-      position: '2 0 -3',
-      visible: true,
-      'render-order': '999'
-    },
-      React.createElement('a-gltf-model', {
-        rotation: '0 45 0',
-        position: '0 0 0',
-        scale: '0.2 0.2 0.2',
-        src: '#raccoonModel',
-        'animation-mixer': '',
-        'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true',
-        visible: true,
-        'render-order': '999'
+    React.createElement('a-assets', null,
+      React.createElement('a-asset-item', {
+        id: 'raccoonModel2',
+        src: 'https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/raccoon/scene.gltf'
       })
     ),
-
-    // Bear - with persistent properties
-    React.createElement('a-entity', {
-      position: '-2 0.5 -3',
-      visible: true,
-      'render-order': '999'
-    },
+    React.createElement('a-camera', {
+      position: '0 0 0',
+      'look-controls': 'enabled: false'
+    }),
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
       React.createElement('a-gltf-model', {
-        rotation: '0 -45 0',
-        position: '0 0 0',
-        scale: '0.2 0.2 0.2',
-        src: '#bearModel',
-        'animation-mixer': '',
-        'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true',
-        visible: true,
-        'render-order': '999'
+        rotation: '0 0 0',
+        position: '0 -0.25 0',
+        scale: '0.05 0.05 0.05',
+        src: '#raccoonModel2',
+        'animation-mixer': ''
       })
     )
   );
 }
+
+function BearScene() {
+  return React.createElement('a-scene', {
+    'mindar-image': 'imageTargetSrc: assets/righthand.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'color-space': 'sRGB',
+    renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
+    'vr-mode-ui': 'enabled: false',
+    'device-orientation-permission-ui': 'enabled: true',
+    embedded: true,
+    id: 'bear-scene',
+    style: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 3 }
+  },
+    React.createElement('a-assets', null,
+      React.createElement('a-asset-item', {
+        id: 'bearModel2',
+        src: 'https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/bear/scene.gltf'
+      })
+    ),
+    React.createElement('a-camera', {
+      position: '0 0 0',
+      'look-controls': 'enabled: false'
+    }),
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
+      React.createElement('a-gltf-model', {
+        rotation: '0 0 0',
+        position: '0 -0.25 0',
+        scale: '0.05 0.05 0.05',
+        src: '#bearModel2',
+        'animation-mixer': ''
+      })
+    )
+  );
+}
+
+
 
 function VideoPlane() {
   return React.createElement('a-plane', {
