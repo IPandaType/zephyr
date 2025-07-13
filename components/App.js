@@ -72,9 +72,64 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('Camera ready! Point at the target image.');
+        setArMessage('🎮 AR Treasure Hunt! Show your hands to find characters, point at target for surprise!');
         setTimeout(() => setShowControls(false), 5000);
+
+        // Add hand gesture detection after camera is ready
+        setTimeout(() => {
+          addHandGestureDetection();
+        }, 3000);
       });
+
+      const addHandGestureDetection = () => {
+        console.log('🤚 Adding hand gesture detection...');
+
+        // Add click/tap areas for hand detection
+        const raccoonHand = document.querySelector('#raccoon-hand');
+        const bearHand = document.querySelector('#bear-hand');
+
+        // Show characters when tapping on left/right sides of screen
+        const handleScreenTap = (event) => {
+          const screenWidth = window.innerWidth;
+          const tapX = event.clientX || (event.touches && event.touches[0].clientX);
+
+          if (tapX < screenWidth / 2) {
+            // Left side tap - show raccoon
+            console.log('🦝 Left side tapped - showing raccoon');
+            if (raccoonHand) {
+              raccoonHand.setAttribute('visible', 'true');
+              setArMessage('🦝 You found the Raccoon! Tap right side for bear!');
+              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+              setShowControls(true);
+
+              // Hide after 5 seconds
+              setTimeout(() => {
+                raccoonHand.setAttribute('visible', 'false');
+              }, 5000);
+            }
+          } else {
+            // Right side tap - show bear
+            console.log('🐻 Right side tapped - showing bear');
+            if (bearHand) {
+              bearHand.setAttribute('visible', 'true');
+              setArMessage('🐻 You found the Bear! Tap left side for raccoon!');
+              setFoundCharacters(prev => ({ ...prev, bear: true }));
+              setShowControls(true);
+
+              // Hide after 5 seconds
+              setTimeout(() => {
+                bearHand.setAttribute('visible', 'false');
+              }, 5000);
+            }
+          }
+        };
+
+        // Add event listeners for taps
+        document.addEventListener('click', handleScreenTap);
+        document.addEventListener('touchstart', handleScreenTap);
+
+        console.log('✅ Hand gesture detection added');
+      };
 
       window.addEventListener('camera-error', () => {
         setArMessage('Camera access denied. Please allow camera access.');
@@ -90,8 +145,8 @@ function App() {
         });
 
         targetEntity.addEventListener('targetLost', () => {
-          console.log('❌ Target lost. Point camera back at the image.');
-          setArMessage('❌ Target lost. Point camera at the image again.');
+          console.log('❌ Target lost.');
+          setArMessage('🎮 Tap left/right sides of screen to find characters!');
           setShowControls(true);
         });
       }

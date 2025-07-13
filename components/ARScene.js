@@ -88,6 +88,61 @@ function AllTargets() {
     // Target 0: Baby video (bayko.jpeg)
     React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
       React.createElement(VideoPlane)
+    ),
+
+    // Add simple 3D characters that appear when pointing camera at hands
+    // These will be positioned to appear when you show your hands to the camera
+    React.createElement('a-entity', {
+      id: 'hand-characters',
+      visible: true
+    },
+      // Raccoon for left hand area
+      React.createElement('a-entity', {
+        id: 'raccoon-hand',
+        position: '-1 -0.5 -1.5',
+        visible: false
+      },
+        React.createElement('a-gltf-model', {
+          src: '#raccoonModel',
+          position: '0 0 0',
+          scale: '0.1 0.1 0.1',
+          rotation: '0 45 0',
+          'animation-mixer': '',
+          'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true'
+        }),
+        React.createElement('a-text', {
+          value: '🦝 Raccoon on Left Hand!',
+          position: '0 0.3 0',
+          align: 'center',
+          color: 'white',
+          'background-color': 'rgba(0,0,0,0.8)',
+          'background-padding': '5 2'
+        })
+      ),
+
+      // Bear for right hand area
+      React.createElement('a-entity', {
+        id: 'bear-hand',
+        position: '1 -0.5 -1.5',
+        visible: false
+      },
+        React.createElement('a-gltf-model', {
+          src: '#bearModel',
+          position: '0 0 0',
+          scale: '0.1 0.1 0.1',
+          rotation: '0 -45 0',
+          'animation-mixer': '',
+          'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true'
+        }),
+        React.createElement('a-text', {
+          value: '🐻 Bear on Right Hand!',
+          position: '0 0.3 0',
+          align: 'center',
+          color: 'white',
+          'background-color': 'rgba(0,0,0,0.8)',
+          'background-padding': '5 2'
+        })
+      )
     )
   );
 }
