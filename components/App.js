@@ -71,39 +71,55 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('Camera ready! Point at the target image.');
+        setArMessage('🎮 AR Treasure Hunt! Look around for the hidden bear 🐻 and raccoon 🦝!');
         setTimeout(() => setShowControls(false), 5000);
+
+        // Ensure characters are visible after camera starts
+        setTimeout(() => {
+          const allCharacters = document.querySelectorAll('[src="#raccoonModel"], [src="#bearModel"]');
+          console.log('📷 Camera ready - making characters visible:', allCharacters.length);
+          allCharacters.forEach((model, index) => {
+            console.log(`📷 Making character ${index} visible after camera init`);
+            model.setAttribute('visible', 'true');
+            model.parentElement.setAttribute('visible', 'true');
+          });
+        }, 2000);
       });
 
       window.addEventListener('camera-error', () => {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Check if 3D models are loading
+      // Wait for AR to initialize, then ensure characters are visible
       setTimeout(() => {
-        const raccoonModel = document.querySelector('[src="#raccoonModel"]');
-        const bearModel = document.querySelector('[src="#bearModel"]');
-        console.log('🦝 Raccoon model found:', !!raccoonModel);
-        console.log('🐻 Bear model found:', !!bearModel);
+        const raccoonModels = document.querySelectorAll('[src="#raccoonModel"]');
+        const bearModels = document.querySelectorAll('[src="#bearModel"]');
+        console.log('🦝 Raccoon models found:', raccoonModels.length);
+        console.log('🐻 Bear models found:', bearModels.length);
 
-        if (raccoonModel) {
-          raccoonModel.addEventListener('model-loaded', () => {
-            console.log('🦝 Raccoon model loaded successfully!');
-          });
-          raccoonModel.addEventListener('model-error', (event) => {
-            console.log('🦝 Raccoon model failed to load:', event);
-          });
-        }
+        // Force visibility of all character models
+        raccoonModels.forEach((model, index) => {
+          console.log(`🦝 Making raccoon ${index} visible`);
+          model.setAttribute('visible', 'true');
+          model.parentElement.setAttribute('visible', 'true');
 
-        if (bearModel) {
-          bearModel.addEventListener('model-loaded', () => {
-            console.log('🐻 Bear model loaded successfully!');
+          model.addEventListener('model-loaded', () => {
+            console.log(`🦝 Raccoon ${index} model loaded successfully!`);
+            model.setAttribute('visible', 'true');
           });
-          bearModel.addEventListener('model-error', (event) => {
-            console.log('🐻 Bear model failed to load:', event);
+        });
+
+        bearModels.forEach((model, index) => {
+          console.log(`🐻 Making bear ${index} visible`);
+          model.setAttribute('visible', 'true');
+          model.parentElement.setAttribute('visible', 'true');
+
+          model.addEventListener('model-loaded', () => {
+            console.log(`🐻 Bear ${index} model loaded successfully!`);
+            model.setAttribute('visible', 'true');
           });
-        }
-      }, 3000);
+        });
+      }, 5000);
 
       // Listen for AR target found/lost events
       const targetEntity = document.querySelector('[mindar-image-target]');
