@@ -1,31 +1,65 @@
-# Zephyr AR 3D Model Viewer
+# Zephyr AR Baby Animation App
 
-An Augmented Reality web application that displays 3D models when a camera detects specific image targets.
+A React-based Augmented Reality web application that displays baby video animations when a camera detects specific image targets.
 
-## ✅ Ready to Use!
-Your Baby.stl model is now hosted directly on GitHub and ready for AR display!
+## ✅ Full React App - Ready to Use!
+Your AR app is now a complete React application with all original functionality preserved!
 
 ## Features
-- 📱 Mobile AR support using MindAR
-- 🎯 Image target recognition (incredibles.jpg)
-- 🎨 3D STL model display with rotation animation
-- 🔄 Multiple fallback options for model loading
-- 📊 Real-time debug console
-- ☁️ GitHub-hosted 3D model (reliable and fast)
+- ⚛️ **React 18** - Modern React with hooks and functional components
+- 📱 **Mobile AR** - MindAR integration for reliable AR tracking
+- 🎯 **Image Recognition** - Detects incredibles.jpg target image
+- 🎬 **Video Animation** - Smooth baby2.mp4 video playback
+- 🎮 **Interactive Controls** - Scale adjustment buttons
+- 📱 **Responsive Design** - Optimized for mobile devices
+- 🎨 **Clean UI** - Professional interface with bottom controls
 
 ## How to Use
 
 ### 🚀 Quick Start
-1. Serve the files over HTTPS (required for camera access)
-2. Open `index.html` in a mobile browser
+
+### Development
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Open http://localhost:3000 in your browser
+```
+
+### Production Build
+```bash
+# Build for production
+npm run build
+
+# Serve the build
+npm run serve
+```
+
+### Usage
+1. Open the app in a mobile browser (HTTPS required for camera)
+2. Grant camera permissions when prompted
 3. Point your camera at the `incredibles.jpg` image
-4. Grant camera permissions when prompted
-5. Watch your 3D baby model appear and rotate!
+4. Watch your baby video animation appear below the logo!
+5. Use the scale buttons to adjust size
 
-## Setup Instructions (Already Complete!)
-
-### ✅ STL File Hosting
-Your `Baby.stl` file is now hosted directly on GitHub and configured in the app.
+## 📁 Project Structure
+```
+zephyr-ar-app/
+├── public/
+│   ├── index.html          # Main HTML file
+│   ├── baby2.mp4          # Baby video animation
+│   ├── incredibles.jpg    # AR target image
+│   └── targets.mind       # MindAR recognition data
+├── src/
+│   ├── App.js            # Main React component
+│   ├── App.css           # Component styles
+│   ├── index.js          # React entry point
+│   └── index.css         # Global styles
+└── package.json          # Dependencies and scripts
+```
 
 #### Option A: GitHub Releases (Recommended)
 1. Go to your GitHub repository
