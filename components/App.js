@@ -1,5 +1,7 @@
 const { useState, useEffect, useRef } = React;
 
+// Fixed: Removed duplicate babyVideo declaration - v1.1
+
 function App() {
   const [arMessage, setArMessage] = useState('Point your camera at the target image...');
   const [showControls, setShowControls] = useState(true);
