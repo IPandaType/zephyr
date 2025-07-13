@@ -14,7 +14,7 @@
       <br>
       <button onclick="showSuccess()" style="margin-top:5px;padding:5px;background:#4CAF50;color:white;">Test AR Working</button>
       <br>
-      <button onclick="scaleAnimation(0.7)" style="margin-top:5px;padding:5px;">Small</button>
+      <button onclick="scaleAnimation(0.8)" style="margin-top:5px;padding:5px;">Small</button>
       <button onclick="scaleAnimation(1.0)" style="margin-top:5px;padding:5px;">Medium</button>
       <button onclick="scaleAnimation(1.25)" style="margin-top:5px;padding:5px;">Large</button>
       <button onclick="scaleAnimation(1.50)" style="margin-top:5px;padding:5px;">Extra Large</button>
@@ -22,10 +22,6 @@
       <button onclick="positionAnimation(0, -0.2, 0)" style="margin-top:5px;padding:5px;">Above Logo</button>
       <button onclick="positionAnimation(0, -0.3, 0)" style="margin-top:5px;padding:5px;">Below Logo</button>
       <button onclick="positionAnimation(0, -0.5, 0)" style="margin-top:5px;padding:5px;">Far Below</button>
-      <br>
-      <button onclick="rotateAnimation(0, 0, 0)" style="margin-top:5px;padding:5px;">Upright</button>
-      <button onclick="rotateAnimation(-90, 0, 0)" style="margin-top:5px;padding:5px;">Flat</button>
-      <button onclick="rotateAnimation(0, 180, 0)" style="margin-top:5px;padding:5px;">Flipped</button>
     </div>
 
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -106,14 +102,7 @@
         }
       }
 
-      // Function to adjust animation rotation
-      function rotateAnimation(x, y, z) {
-        const animationPlane = document.querySelector('#baby-animation-plane');
-        if (animationPlane) {
-          animationPlane.setAttribute('rotation', `${x} ${y} ${z}`);
-          messageSpan.textContent = `Animation rotated to: ${x}, ${y}, ${z}. Point camera at target.`;
-        }
-      }
+
 
       // Test function to check if video animation exists
       function showSuccess() {
