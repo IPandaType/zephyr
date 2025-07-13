@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
+  const [arMessage, setArMessage] = useState('Point your camera at the target image...');
   const [showControls, setShowControls] = useState(true);
   const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
@@ -72,7 +72,7 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
+        setArMessage('Camera ready! Point at the target image.');
         setTimeout(() => setShowControls(false), 5000);
       });
 
@@ -80,59 +80,21 @@ function App() {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Listen for AR target events from main scene
+      // Listen for AR target events
       const targetEntity = document.querySelector('[mindar-image-target]');
       if (targetEntity) {
         targetEntity.addEventListener('targetFound', () => {
-          console.log('👶 Baby target found!');
+          console.log('🎯 Target found! Model should be visible now.');
           setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
-          setFoundCharacters(prev => ({ ...prev, baby: true }));
           setShowControls(true);
         });
 
         targetEntity.addEventListener('targetLost', () => {
-          console.log('👶 Baby target lost');
-          setArMessage('🎮 Show your hands to find the characters!');
+          console.log('❌ Target lost. Point camera back at the image.');
+          setArMessage('❌ Target lost. Point camera at the image again.');
           setShowControls(true);
         });
       }
-
-      // Listen for hand tracking events (added after delay)
-      setTimeout(() => {
-        // Left hand (raccoon) events
-        const leftHandTargets = document.querySelectorAll('#lefthand-scene [mindar-image-target]');
-        leftHandTargets.forEach(target => {
-          target.addEventListener('targetFound', () => {
-            console.log('🦝 Left hand target found! Raccoon should appear');
-            setArMessage('🦝 You found the Raccoon on your left hand! Show your right hand ✋ for the bear!');
-            setFoundCharacters(prev => ({ ...prev, raccoon: true }));
-            setShowControls(true);
-          });
-
-          target.addEventListener('targetLost', () => {
-            console.log('🦝 Left hand target lost');
-            setArMessage('🎮 Keep showing your hands to find the characters!');
-            setShowControls(true);
-          });
-        });
-
-        // Right hand (bear) events
-        const rightHandTargets = document.querySelectorAll('#righthand-scene [mindar-image-target]');
-        rightHandTargets.forEach(target => {
-          target.addEventListener('targetFound', () => {
-            console.log('🐻 Right hand target found! Bear should appear');
-            setArMessage('🐻 You found the Bear on your right hand! Show your left hand 🤚 for the raccoon!');
-            setFoundCharacters(prev => ({ ...prev, bear: true }));
-            setShowControls(true);
-          });
-
-          target.addEventListener('targetLost', () => {
-            console.log('🐻 Right hand target lost');
-            setArMessage('🎮 Keep showing your hands to find the characters!');
-            setShowControls(true);
-          });
-        });
-      }, 5000);
 
 
     };
