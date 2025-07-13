@@ -85,32 +85,13 @@ function ARCamera() {
 
 function MultiTargets() {
   return React.createElement('a-entity', null,
-    // Target 0: Baby video (bayko.jpeg)
+    // Target 0: Baby video (bayko.jpeg) - ONLY baby video should be here
     React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
       React.createElement(VideoPlane)
-    ),
-
-    // Target 1: Raccoon (lefthand.jpeg)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 1' },
-      React.createElement('a-gltf-model', {
-        rotation: '0 0 0',
-        position: '0 -0.25 0',
-        scale: '0.05 0.05 0.05',
-        src: '#raccoonModel',
-        'animation-mixer': ''
-      })
-    ),
-
-    // Target 2: Bear (righthand.jpeg)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 2' },
-      React.createElement('a-gltf-model', {
-        rotation: '0 0 0',
-        position: '0 -0.25 0',
-        scale: '0.05 0.05 0.05',
-        src: '#bearModel',
-        'animation-mixer': ''
-      })
     )
+
+    // Temporarily removing other targets until we figure out the correct indices
+    // We'll add them back once we confirm target 0 works correctly
   );
 }
 

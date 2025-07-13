@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
+  const [arMessage, setArMessage] = useState('Point your camera at the target image...');
   const [showControls, setShowControls] = useState(true);
   const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
@@ -72,7 +72,7 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('🎮 AR Treasure Hunt! Show your left hand 🤚 for raccoon, right hand ✋ for bear!');
+        setArMessage('Camera ready! Point at the target image.');
         setTimeout(() => setShowControls(false), 5000);
       });
 
@@ -80,37 +80,21 @@ function App() {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Listen for AR target events from multi-target scene
-      setTimeout(() => {
-        const allTargets = document.querySelectorAll('[mindar-image-target]');
-        allTargets.forEach((target, index) => {
-          target.addEventListener('targetFound', () => {
-            console.log(`🎯 Target ${index} found!`);
-
-            if (index === 0) {
-              // Baby target (bayko.jpeg)
-              setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
-              setFoundCharacters(prev => ({ ...prev, baby: true }));
-            } else if (index === 1) {
-              // Raccoon target (lefthand.jpeg)
-              setArMessage('🦝 You found the Raccoon on your left hand! Show your right hand ✋ for the bear!');
-              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
-            } else if (index === 2) {
-              // Bear target (righthand.jpeg)
-              setArMessage('🐻 You found the Bear on your right hand! Show your left hand 🤚 for the raccoon!');
-              setFoundCharacters(prev => ({ ...prev, bear: true }));
-            }
-
-            setShowControls(true);
-          });
-
-          target.addEventListener('targetLost', () => {
-            console.log(`❌ Target ${index} lost`);
-            setArMessage('🎮 Keep searching! Show your hands to find the characters!');
-            setShowControls(true);
-          });
+      // Listen for AR target events - only target 0 for now
+      const targetEntity = document.querySelector('[mindar-image-target]');
+      if (targetEntity) {
+        targetEntity.addEventListener('targetFound', () => {
+          console.log('🎯 Target 0 found! Baby animation should appear.');
+          setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
+          setShowControls(true);
         });
-      }, 3000);
+
+        targetEntity.addEventListener('targetLost', () => {
+          console.log('❌ Target 0 lost.');
+          setArMessage('❌ Target lost. Point camera at the image again.');
+          setShowControls(true);
+        });
+      }
 
 
     };
