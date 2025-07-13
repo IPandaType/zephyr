@@ -13,6 +13,38 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.css" />
 
+    <!-- Custom smooth tracking component -->
+    <script>
+      AFRAME.registerComponent('smooth-transform', {
+        schema: {
+          enabled: {type: 'boolean', default: true},
+          factor: {type: 'number', default: 0.85}
+        },
+        init: function () {
+          this.lastPosition = new THREE.Vector3();
+          this.lastRotation = new THREE.Euler();
+          this.smoothPosition = new THREE.Vector3();
+          this.smoothRotation = new THREE.Euler();
+        },
+        tick: function () {
+          if (!this.data.enabled) return;
+
+          const object3D = this.el.object3D;
+          const factor = this.data.factor;
+
+          // Smooth position interpolation to reduce jitter
+          this.smoothPosition.lerp(object3D.position, factor);
+          object3D.position.copy(this.smoothPosition);
+
+          // Smooth rotation interpolation
+          this.smoothRotation.x += (object3D.rotation.x - this.smoothRotation.x) * factor;
+          this.smoothRotation.y += (object3D.rotation.y - this.smoothRotation.y) * factor;
+          this.smoothRotation.z += (object3D.rotation.z - this.smoothRotation.z) * factor;
+          object3D.rotation.copy(this.smoothRotation);
+        }
+      });
+    </script>
+
     <!-- React Scripts -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -96,9 +128,9 @@
 
     <!-- Load Styled Components and React Components -->
     <script type="text/babel" src="components/StyledComponents.js?v=3.0"></script>
-    <script type="text/babel" src="components/ARScene.js?v=5.4"></script>
-    <script type="text/babel" src="components/ARControls.js?v=5.4"></script>
-    <script type="text/babel" src="components/App.js?v=5.4"></script>
+    <script type="text/babel" src="components/ARScene.js?v=6.0"></script>
+    <script type="text/babel" src="components/ARControls.js?v=6.0"></script>
+    <script type="text/babel" src="components/App.js?v=6.0"></script>
 
     <script type="text/babel">
       // Wait for all components to load before rendering

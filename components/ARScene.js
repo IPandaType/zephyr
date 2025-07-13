@@ -7,12 +7,12 @@ function ARScene({ sceneRef, videoRef }) {
     position: 'relative'
   };
 
-  // Multi-target scene using your combined targets.mind file
+  // Multi-target scene with optimized smooth tracking
   const sceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: assets/targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'mindar-image': 'imageTargetSrc: assets/targets.mind; autoStart: true; filterMinCF: 0.001; filterBeta: 0.01; warmupTolerance: 2; missTolerance: 10; showStats: false',
     'color-space': 'sRGB',
-    renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
+    renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp, alpha: true',
     'vr-mode-ui': 'enabled: false',
     'device-orientation-permission-ui': 'enabled: true'
   },
@@ -90,25 +90,35 @@ function MultiTargets() {
       React.createElement(VideoPlane)
     ),
 
-    // Target 1: Raccoon (lefthand.jpeg)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 1' },
+    // Target 1: Raccoon (lefthand.jpeg) - optimized for smooth tracking
+    React.createElement('a-entity', {
+      'mindar-image-target': 'targetIndex: 1',
+      'smooth-tracking': 'enabled: true'
+    },
       React.createElement('a-gltf-model', {
         rotation: '0 0 0',
         position: '0 -0.25 0',
         scale: '0.05 0.05 0.05',
         src: '#raccoonModel',
-        'animation-mixer': ''
+        'animation-mixer': 'clip: *; loop: repeat; crossFadeDuration: 0.3',
+        'shadow': 'cast: true; receive: true',
+        'smooth-transform': 'enabled: true'
       })
     ),
 
-    // Target 2: Bear (righthand.jpeg)
-    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 2' },
+    // Target 2: Bear (righthand.jpeg) - optimized for smooth tracking
+    React.createElement('a-entity', {
+      'mindar-image-target': 'targetIndex: 2',
+      'smooth-tracking': 'enabled: true'
+    },
       React.createElement('a-gltf-model', {
         rotation: '0 0 0',
         position: '0 -0.25 0',
         scale: '0.05 0.05 0.05',
         src: '#bearModel',
-        'animation-mixer': ''
+        'animation-mixer': 'clip: *; loop: repeat; crossFadeDuration: 0.3',
+        'shadow': 'cast: true; receive: true',
+        'smooth-transform': 'enabled: true'
       })
     )
   );
@@ -126,10 +136,9 @@ function VideoPlane() {
     width: '1.0',
     height: '1.0',
     rotation: '-15 0 0',
-    material: 'transparent: true; shader: flat; alphaTest: 0.1',
+    material: 'transparent: true; shader: flat; alphaTest: 0.1; side: double',
     'geometry': 'primitive: plane; width: 1; height: 1; segmentsWidth: 1; segmentsHeight: 1',
-    'animation__stabilize': 'property: object3D.position; to: 0 -0.3 0; dur: 100; easing: easeOutQuad; loop: false',
-    'look-at': '[camera]',
-    'billboard': 'true'
+    'smooth-transform': 'enabled: true; factor: 0.8',
+    'shadow': 'receive: true'
   });
 }
