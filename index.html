@@ -30,8 +30,8 @@
            vr-mode-ui="enabled: false"
            device-orientation-permission-ui="enabled: true">
       <a-assets>
-        <!-- GLB model - reliable web format -->
-        <a-asset-item id="babyModel" src="Baby.glb"></a-asset-item>
+        <!-- Baby Waving GLB model - with animation -->
+        <a-asset-item id="babyModel" src="babyWaving.glb"></a-asset-item>
         <img id="target-image" src="incredibles.jpg" />
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -42,7 +42,7 @@
                       position="0 -0.3 0"
                       scale="0.005 0.005 0.005"
                       rotation="0 0 0"
-                      animation-mixer="clip: *; loop: repeat"></a-gltf-model>
+                      animation-mixer="clip: *; loop: repeat; repetitions: Infinity"></a-gltf-model>
 
         <!-- Fallback geometric model (hidden by default) -->
         <a-group id="fallback-model" visible="false" position="0 0 0" scale="0.5 0.5 0.5">
@@ -111,8 +111,8 @@
         const fallbackModel = document.querySelector('[mindar-image-target] #fallback-model');
 
         if (gltfModel) {
-          messageSpan.textContent = '✅ GLB Baby model found! Point at target to see it.';
-          console.log('✅ GLB model exists in DOM:', gltfModel);
+          messageSpan.textContent = '✅ Baby Waving GLB model found! Point at target to see it.';
+          console.log('✅ Baby Waving GLB model exists in DOM:', gltfModel);
           // Make it larger for testing
           gltfModel.setAttribute('scale', '0.01 0.01 0.01');
         } else if (fallbackModel) {
@@ -133,8 +133,8 @@
 
         if (gltfModel) {
           gltfModel.addEventListener('model-loaded', () => {
-            console.log('✅ GLB baby model loaded successfully');
-            messageSpan.textContent = 'Baby GLB model loaded! Point camera at target.';
+            console.log('✅ Baby Waving GLB model loaded successfully');
+            messageSpan.textContent = 'Baby Waving model loaded! Point camera at target.';
           });
 
           gltfModel.addEventListener('model-error', (event) => {
