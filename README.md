@@ -36,10 +36,14 @@ npx serve .
 4. Watch your baby video animation appear below the logo!
 5. Use the scale buttons to adjust size
 
-## 📁 Clean Project Structure
+## 📁 Modular React Structure
 ```
 zephyr-ar-app/
-├── index.html            # React AR app (single file!)
+├── index.html            # Main HTML file with React setup
+├── components/
+│   ├── App.js           # Main React component with state management
+│   ├── ARControls.js    # Control buttons and UI components
+│   └── ARScene.js       # A-Frame AR scene components
 ├── baby2.mp4            # Baby video animation
 ├── bayko.jpeg           # AR target image
 ├── targets.mind         # MindAR recognition data
