@@ -77,7 +77,7 @@
       // Listen for AR target found/lost events
       document.querySelector('[mindar-image-target]').addEventListener('targetFound', () => {
         console.log('🎯 Target found! Model should be visible now.');
-        messageSpan.textContent = '🎯 Target found! Look for the pink baby model!';
+        messageSpan.textContent = '🎯 Target found!';
         statusDiv.style.display = 'block';
       });
 
@@ -147,7 +147,7 @@
         if (babyVideo) {
           // Ensure smooth looping
           babyVideo.addEventListener('loadeddata', () => {
-            console.log('✅ Baby video loaded successfully');
+            console.log('✅ video loaded successfully');
             messageSpan.textContent = 'Video animation loaded! Point camera at target.';
 
             // Set video properties for smooth playback
