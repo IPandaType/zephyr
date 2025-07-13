@@ -22,6 +22,10 @@
       <button onclick="positionAnimation(0, -0.2, 0)" style="margin-top:5px;padding:5px;">Above Logo</button>
       <button onclick="positionAnimation(0, -0.3, 0)" style="margin-top:5px;padding:5px;">Below Logo</button>
       <button onclick="positionAnimation(0, -0.5, 0)" style="margin-top:5px;padding:5px;">Far Below</button>
+      <br>
+      <button onclick="rotateAnimation(0, 0, 0)" style="margin-top:5px;padding:5px;">Upright</button>
+      <button onclick="rotateAnimation(-90, 0, 0)" style="margin-top:5px;padding:5px;">Flat</button>
+      <button onclick="rotateAnimation(0, 180, 0)" style="margin-top:5px;padding:5px;">Flipped</button>
     </div>
     <div id="console-log" style="position:fixed;bottom:0;left:0;right:0;max-height:40vh;overflow:auto;background:rgba(0,0,0,0.8);color:#fff;font-size:12px;z-index:9999;padding:8px;display:none;"></div>
     <a-scene mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
@@ -36,13 +40,13 @@
       </a-assets>
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Video animation plane - your baby.mp4 file -->
+        <!-- Video animation plane - your baby.mp4 file (upright) -->
         <a-plane id="baby-animation-plane"
                  src="#baby-video"
                  position="0 -0.3 0"
                  width="0.5"
                  height="0.5"
-                 rotation="-90 0 0"
+                 rotation="0 0 0"
                  material="transparent: true; shader: flat"
                  animation="property: scale; to: 1.05 1.05 1.05; dir: alternate; dur: 3000; loop: true"></a-plane>
       </a-entity>
@@ -94,6 +98,16 @@
           animationPlane.setAttribute('position', `${x} ${y} ${z}`);
           messageSpan.textContent = `Animation positioned at Y: ${y}. Point camera at target.`;
           console.log(`📍 Animation positioned at: ${x}, ${y}, ${z}`);
+        }
+      }
+
+      // Function to adjust animation rotation
+      function rotateAnimation(x, y, z) {
+        const animationPlane = document.querySelector('#baby-animation-plane');
+        if (animationPlane) {
+          animationPlane.setAttribute('rotation', `${x} ${y} ${z}`);
+          messageSpan.textContent = `Animation rotated to: ${x}, ${y}, ${z}. Point camera at target.`;
+          console.log(`🔄 Animation rotated to: ${x}, ${y}, ${z}`);
         }
       }
 
