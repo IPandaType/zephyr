@@ -1,2 +1,4 @@
 .idea
+# FBX files don't work well in web browsers
+*.fbx
 .DS_Store
