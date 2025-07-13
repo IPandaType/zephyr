@@ -14,28 +14,19 @@ Your AR app is now a complete React application with all original functionality 
 - 📱 **Responsive Design** - Optimized for mobile devices
 - 🎨 **Clean UI** - Professional interface with bottom controls
 
-## How to Use
+## 🚀 Quick Start
 
-### 🚀 Quick Start
+### Simple Deployment
+Just serve the files over HTTPS - no build process needed!
 
-### Development
 ```bash
-# Install dependencies
-npm install
+# Using Python (if you have it)
+python -m http.server 8000
 
-# Start development server
-npm start
+# Using Node.js serve (if you have it)
+npx serve .
 
-# Open http://localhost:3000 in your browser
-```
-
-### Production Build
-```bash
-# Build for production
-npm run build
-
-# Serve the build
-npm run serve
+# Or upload to any web hosting service
 ```
 
 ### Usage
@@ -45,20 +36,14 @@ npm run serve
 4. Watch your baby video animation appear below the logo!
 5. Use the scale buttons to adjust size
 
-## 📁 Project Structure
+## 📁 Clean Project Structure
 ```
 zephyr-ar-app/
-├── public/
-│   ├── index.html          # Main HTML file
-│   ├── baby.mp4          # Baby video animation
-│   ├── bayko.jpeg        # AR target image
-│   └── targets.mind       # MindAR recognition data
-├── src/
-│   ├── App.js            # Main React component
-│   ├── App.css           # Component styles
-│   ├── index.js          # React entry point
-│   └── index.css         # Global styles
-└── package.json          # Dependencies and scripts
+├── index.html            # React AR app (single file!)
+├── baby2.mp4            # Baby video animation
+├── bayko.jpeg           # AR target image
+├── targets.mind         # MindAR recognition data
+└── README.md            # This file
 ```
 
 #### Option A: GitHub Releases (Recommended)
