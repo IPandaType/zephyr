@@ -80,54 +80,32 @@ function App() {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Listen for AR target events from all scenes
+      // Listen for AR target events from the single scene
       setTimeout(() => {
-        // Baby scene target events
-        const babyTargets = document.querySelectorAll('#baby-scene [mindar-image-target]');
-        babyTargets.forEach(target => {
+        const allTargets = document.querySelectorAll('[mindar-image-target]');
+        allTargets.forEach((target, index) => {
           target.addEventListener('targetFound', () => {
-            console.log('👶 Baby target found!');
-            setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
-            setFoundCharacters(prev => ({ ...prev, baby: true }));
+            console.log(`🎯 Target ${index} found!`);
+
+            if (index === 0) {
+              // Baby target (bayko.jpeg)
+              setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
+              setFoundCharacters(prev => ({ ...prev, baby: true }));
+            } else if (index === 1) {
+              // Raccoon target (lefthand.jpeg)
+              setArMessage('🦝 You found the Raccoon! Look for the right hand ✋ to find the bear!');
+              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+            } else if (index === 2) {
+              // Bear target (righthand.jpeg)
+              setArMessage('🐻 You found the Bear! Look for the left hand 🤚 to find the raccoon!');
+              setFoundCharacters(prev => ({ ...prev, bear: true }));
+            }
+
             setShowControls(true);
           });
 
           target.addEventListener('targetLost', () => {
-            console.log('👶 Baby target lost');
-            setArMessage('🎮 Keep searching for hand targets!');
-            setShowControls(true);
-          });
-        });
-
-        // Raccoon scene target events
-        const raccoonTargets = document.querySelectorAll('#raccoon-scene [mindar-image-target]');
-        raccoonTargets.forEach(target => {
-          target.addEventListener('targetFound', () => {
-            console.log('🦝 Raccoon target found!');
-            setArMessage('🦝 You found the Raccoon! Look for the right hand ✋ to find the bear!');
-            setFoundCharacters(prev => ({ ...prev, raccoon: true }));
-            setShowControls(true);
-          });
-
-          target.addEventListener('targetLost', () => {
-            console.log('🦝 Raccoon target lost');
-            setArMessage('🎮 Keep searching for hand targets!');
-            setShowControls(true);
-          });
-        });
-
-        // Bear scene target events
-        const bearTargets = document.querySelectorAll('#bear-scene [mindar-image-target]');
-        bearTargets.forEach(target => {
-          target.addEventListener('targetFound', () => {
-            console.log('🐻 Bear target found!');
-            setArMessage('🐻 You found the Bear! Look for the left hand 🤚 to find the raccoon!');
-            setFoundCharacters(prev => ({ ...prev, bear: true }));
-            setShowControls(true);
-          });
-
-          target.addEventListener('targetLost', () => {
-            console.log('🐻 Bear target lost');
+            console.log(`❌ Target ${index} lost`);
             setArMessage('🎮 Keep searching for hand targets!');
             setShowControls(true);
           });
