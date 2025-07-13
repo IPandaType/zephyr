@@ -89,9 +89,6 @@ function MultiTargets() {
     React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
       React.createElement(VideoPlane)
     )
-
-    // Temporarily removing other targets until we figure out the correct indices
-    // We'll add them back once we confirm target 0 works correctly
   );
 }
 
