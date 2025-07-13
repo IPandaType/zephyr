@@ -11,12 +11,39 @@ function App() {
     const initializeAR = () => {
       console.log('🚀 Initializing AR...');
 
-      // Check if video element exists
+      // Check if video element exists and set up video event listeners
       const babyVideo = document.querySelector('#baby-video');
       console.log('📹 Video element found:', !!babyVideo);
       if (babyVideo) {
         console.log('📹 Video src:', babyVideo.src);
+
+        // Enhanced video loading and smooth playback
+        babyVideo.addEventListener('loadeddata', () => {
+          setArMessage('Video animation loaded! Point camera at target.');
+          babyVideo.currentTime = 0;
+          babyVideo.playbackRate = 1.0;
+        });
+
+        babyVideo.addEventListener('error', () => {
+          setArMessage('Video failed to load.');
+        });
+
+        babyVideo.addEventListener('canplay', () => {
+          babyVideo.play();
+        });
+
+        babyVideo.addEventListener('ended', () => {
+          babyVideo.currentTime = 0;
+          babyVideo.play();
+        });
+
+        babyVideo.addEventListener('pause', () => {
+          if (!babyVideo.ended) {
+            babyVideo.play();
+          }
+        });
       }
+
       // Listen for camera events
       window.addEventListener('camera-init', () => {
         setArMessage('Camera ready! Point at the target image.');
@@ -43,34 +70,7 @@ function App() {
         });
       }
 
-      // Enhanced video loading and smooth playback
-      const babyVideo = document.querySelector('#baby-video');
-      if (babyVideo) {
-        babyVideo.addEventListener('loadeddata', () => {
-          setArMessage('Video animation loaded! Point camera at target.');
-          babyVideo.currentTime = 0;
-          babyVideo.playbackRate = 1.0;
-        });
 
-        babyVideo.addEventListener('error', () => {
-          setArMessage('Video failed to load.');
-        });
-
-        babyVideo.addEventListener('canplay', () => {
-          babyVideo.play();
-        });
-
-        babyVideo.addEventListener('ended', () => {
-          babyVideo.currentTime = 0;
-          babyVideo.play();
-        });
-
-        babyVideo.addEventListener('pause', () => {
-          if (!babyVideo.ended) {
-            babyVideo.play();
-          }
-        });
-      }
     };
 
     // Initialize after a short delay to ensure DOM is ready
