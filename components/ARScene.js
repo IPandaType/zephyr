@@ -7,10 +7,10 @@ function ARScene({ sceneRef, videoRef }) {
     position: 'relative'
   };
 
-  // Single scene with all targets
+  // Multi-target scene following MindAR documentation
   const sceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: assets/targets.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
+    'mindar-image': 'imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/band.mind; autoStart: true; filterMinCF: 0.0001; filterBeta: 0.001; warmupTolerance: 5; missTolerance: 5',
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp',
     'vr-mode-ui': 'enabled: false',
@@ -18,7 +18,7 @@ function ARScene({ sceneRef, videoRef }) {
   },
     React.createElement(ARAssets, { videoRef }),
     React.createElement(ARCamera),
-    React.createElement(AllTargets)
+    React.createElement(MultiTargets)
   );
 
   if (!ARSceneWrapper) {
@@ -83,66 +83,33 @@ function ARCamera() {
   });
 }
 
-function AllTargets() {
+function MultiTargets() {
   return React.createElement('a-entity', null,
-    // Target 0: Baby video (bayko.jpeg)
+    // Target 0: Raccoon (using band example target 0)
     React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 0' },
-      React.createElement(VideoPlane)
+      React.createElement('a-gltf-model', {
+        rotation: '0 0 0',
+        position: '0 -0.25 0',
+        scale: '0.05 0.05 0.05',
+        src: '#raccoonModel',
+        'animation-mixer': ''
+      })
     ),
 
-    // Add simple 3D characters that appear when pointing camera at hands
-    // These will be positioned to appear when you show your hands to the camera
-    React.createElement('a-entity', {
-      id: 'hand-characters',
-      visible: true
-    },
-      // Raccoon for left hand area
-      React.createElement('a-entity', {
-        id: 'raccoon-hand',
-        position: '-1 -0.5 -1.5',
-        visible: false
-      },
-        React.createElement('a-gltf-model', {
-          src: '#raccoonModel',
-          position: '0 0 0',
-          scale: '0.1 0.1 0.1',
-          rotation: '0 45 0',
-          'animation-mixer': '',
-          'animation': 'property: rotation; to: 0 405 0; dur: 10000; loop: true'
-        }),
-        React.createElement('a-text', {
-          value: '🦝 Raccoon on Left Hand!',
-          position: '0 0.3 0',
-          align: 'center',
-          color: 'white',
-          'background-color': 'rgba(0,0,0,0.8)',
-          'background-padding': '5 2'
-        })
-      ),
+    // Target 1: Bear (using band example target 1)
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 1' },
+      React.createElement('a-gltf-model', {
+        rotation: '0 0 0',
+        position: '0 -0.25 0',
+        scale: '0.05 0.05 0.05',
+        src: '#bearModel',
+        'animation-mixer': ''
+      })
+    ),
 
-      // Bear for right hand area
-      React.createElement('a-entity', {
-        id: 'bear-hand',
-        position: '1 -0.5 -1.5',
-        visible: false
-      },
-        React.createElement('a-gltf-model', {
-          src: '#bearModel',
-          position: '0 0 0',
-          scale: '0.1 0.1 0.1',
-          rotation: '0 -45 0',
-          'animation-mixer': '',
-          'animation': 'property: rotation; to: 0 -405 0; dur: 8000; loop: true'
-        }),
-        React.createElement('a-text', {
-          value: '🐻 Bear on Right Hand!',
-          position: '0 0.3 0',
-          align: 'center',
-          color: 'white',
-          'background-color': 'rgba(0,0,0,0.8)',
-          'background-padding': '5 2'
-        })
-      )
+    // Target 2: Baby video (using band example target 2, but we'll replace with our video)
+    React.createElement('a-entity', { 'mindar-image-target': 'targetIndex: 2' },
+      React.createElement(VideoPlane)
     )
   );
 }

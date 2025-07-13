@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('Point your camera at the target image...');
+  const [arMessage, setArMessage] = useState('🎮 AR Treasure Hunt! Find the target images to discover characters!');
   const [showControls, setShowControls] = useState(true);
   const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
@@ -72,84 +72,45 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('🎮 AR Treasure Hunt! Show your hands to find characters, point at target for surprise!');
+        setArMessage('🎮 AR Treasure Hunt! Find the target images to discover characters!');
         setTimeout(() => setShowControls(false), 5000);
-
-        // Add hand gesture detection after camera is ready
-        setTimeout(() => {
-          addHandGestureDetection();
-        }, 3000);
       });
-
-      const addHandGestureDetection = () => {
-        console.log('🤚 Adding hand gesture detection...');
-
-        // Add click/tap areas for hand detection
-        const raccoonHand = document.querySelector('#raccoon-hand');
-        const bearHand = document.querySelector('#bear-hand');
-
-        // Show characters when tapping on left/right sides of screen
-        const handleScreenTap = (event) => {
-          const screenWidth = window.innerWidth;
-          const tapX = event.clientX || (event.touches && event.touches[0].clientX);
-
-          if (tapX < screenWidth / 2) {
-            // Left side tap - show raccoon
-            console.log('🦝 Left side tapped - showing raccoon');
-            if (raccoonHand) {
-              raccoonHand.setAttribute('visible', 'true');
-              setArMessage('🦝 You found the Raccoon! Tap right side for bear!');
-              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
-              setShowControls(true);
-
-              // Hide after 5 seconds
-              setTimeout(() => {
-                raccoonHand.setAttribute('visible', 'false');
-              }, 5000);
-            }
-          } else {
-            // Right side tap - show bear
-            console.log('🐻 Right side tapped - showing bear');
-            if (bearHand) {
-              bearHand.setAttribute('visible', 'true');
-              setArMessage('🐻 You found the Bear! Tap left side for raccoon!');
-              setFoundCharacters(prev => ({ ...prev, bear: true }));
-              setShowControls(true);
-
-              // Hide after 5 seconds
-              setTimeout(() => {
-                bearHand.setAttribute('visible', 'false');
-              }, 5000);
-            }
-          }
-        };
-
-        // Add event listeners for taps
-        document.addEventListener('click', handleScreenTap);
-        document.addEventListener('touchstart', handleScreenTap);
-
-        console.log('✅ Hand gesture detection added');
-      };
 
       window.addEventListener('camera-error', () => {
         setArMessage('Camera access denied. Please allow camera access.');
       });
 
-      // Listen for AR target events
-      const targetEntity = document.querySelector('[mindar-image-target]');
-      if (targetEntity) {
-        targetEntity.addEventListener('targetFound', () => {
-          console.log('🎯 Target found! Model should be visible now.');
-          setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
-          setShowControls(true);
-        });
+      // Listen for AR target events from multi-target scene
+      setTimeout(() => {
+        const allTargets = document.querySelectorAll('[mindar-image-target]');
+        allTargets.forEach((target, index) => {
+          target.addEventListener('targetFound', () => {
+            console.log(`🎯 Target ${index} found!`);
 
-        targetEntity.addEventListener('targetLost', () => {
-          console.log('❌ Target lost.');
-          setArMessage('🎮 Tap left/right sides of screen to find characters!');
-          setShowControls(true);
+            if (index === 0) {
+              // Raccoon target
+              setArMessage('🦝 You found the Raccoon! Look for more targets!');
+              setFoundCharacters(prev => ({ ...prev, raccoon: true }));
+            } else if (index === 1) {
+              // Bear target
+              setArMessage('🐻 You found the Bear! Look for more targets!');
+              setFoundCharacters(prev => ({ ...prev, bear: true }));
+            } else if (index === 2) {
+              // Baby target
+              setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
+              setFoundCharacters(prev => ({ ...prev, baby: true }));
+            }
+
+            setShowControls(true);
+          });
+
+          target.addEventListener('targetLost', () => {
+            console.log(`❌ Target ${index} lost`);
+            setArMessage('🎮 Keep searching for target images!');
+            setShowControls(true);
+          });
         });
-      }
+      }, 3000);
 
 
     };
