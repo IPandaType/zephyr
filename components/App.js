@@ -61,7 +61,7 @@ function App() {
       if (targetEntity) {
         targetEntity.addEventListener('targetFound', () => {
           console.log('🎯 Target found! Model should be visible now.');
-          setArMessage('🎯 Target found! Look for the baby animation!');
+          setArMessage('🎯 Surprise!!! Mark your calendars! My debut is January 2026 📅👣"');
           setShowControls(true);
         });
 
