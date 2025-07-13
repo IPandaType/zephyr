@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
   const [arMessage, setArMessage] = useState('Point your camera at the target image...');
-  const [showControls, setShowControls] = useState(false);
+  const [showControls, setShowControls] = useState(true);
   const sceneRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -121,7 +121,7 @@ function App() {
           <video
             id="baby-video"
             ref={videoRef}
-            src="baby2.mp4"
+            src="baby.mp4"
             autoPlay
             loop
             muted
@@ -130,7 +130,7 @@ function App() {
             crossOrigin="anonymous"
             style={{ objectFit: 'cover' }}
           />
-          <img id="target-image" src="incredibles.jpg" alt="AR Target" />
+          <img id="target-image" src="bayko.jpeg" alt="AR Target" />
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>

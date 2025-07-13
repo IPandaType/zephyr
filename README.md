@@ -8,8 +8,8 @@ Your AR app is now a complete React application with all original functionality 
 ## Features
 - ⚛️ **React 18** - Modern React with hooks and functional components
 - 📱 **Mobile AR** - MindAR integration for reliable AR tracking
-- 🎯 **Image Recognition** - Detects incredibles.jpg target image
-- 🎬 **Video Animation** - Smooth baby2.mp4 video playback
+- 🎯 **Image Recognition** - Detects bayko.jpeg target image
+- 🎬 **Video Animation** - Smooth baby.mp4 video playback
 - 🎮 **Interactive Controls** - Scale adjustment buttons
 - 📱 **Responsive Design** - Optimized for mobile devices
 - 🎨 **Clean UI** - Professional interface with bottom controls
@@ -41,7 +41,7 @@ npm run serve
 ### Usage
 1. Open the app in a mobile browser (HTTPS required for camera)
 2. Grant camera permissions when prompted
-3. Point your camera at the `incredibles.jpg` image
+3. Point your camera at the `bayko.jpeg` image
 4. Watch your baby video animation appear below the logo!
 5. Use the scale buttons to adjust size
 
@@ -50,8 +50,8 @@ npm run serve
 zephyr-ar-app/
 ├── public/
 │   ├── index.html          # Main HTML file
-│   ├── baby2.mp4          # Baby video animation
-│   ├── incredibles.jpg    # AR target image
+│   ├── baby.mp4          # Baby video animation
+│   ├── bayko.jpeg        # AR target image
 │   └── targets.mind       # MindAR recognition data
 ├── src/
 │   ├── App.js            # Main React component
