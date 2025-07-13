@@ -86,11 +86,13 @@ function App() {
     }
   };
 
+  console.log('🔍 Checking StyledComponents:', window.StyledComponents);
   const { AppContainer } = window.StyledComponents || {};
+  console.log('🔍 AppContainer:', AppContainer);
 
   // Fallback if StyledComponents not loaded
   if (!AppContainer) {
-    console.error('❌ StyledComponents not loaded properly');
+    console.error('❌ StyledComponents not loaded properly, using fallback');
     return React.createElement('div', {
       style: { width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden' }
     },

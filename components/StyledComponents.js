@@ -1,6 +1,8 @@
 // Custom Styled Components Implementation for AR App
 // This creates React components with inline styles that mimic styled-components
 
+console.log('🎨 Loading StyledComponents...');
+
 function createStyledComponent(tag, styles) {
   return function StyledComponent(props) {
     const { children, ...otherProps } = props;
@@ -128,6 +130,8 @@ const StatusIndicator = createStyledComponent('div', (props) => ({
 }));
 
 // Export all styled components
+console.log('🎨 Creating StyledComponents object...');
+
 window.StyledComponents = {
   AppContainer,
   ARControlsContainer,
@@ -138,3 +142,5 @@ window.StyledComponents = {
   LoadingOverlay,
   StatusIndicator
 };
+
+console.log('✅ StyledComponents loaded:', window.StyledComponents);

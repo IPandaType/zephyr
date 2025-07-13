@@ -84,12 +84,26 @@
     <script type="text/babel" src="components/App.js"></script>
 
     <script type="text/babel">
-      // App component is now loaded from components/App.js
+      // Wait for all components to load before rendering
+      function initializeApp() {
+        console.log('🚀 Initializing React App...');
+        console.log('🔍 StyledComponents available:', !!window.StyledComponents);
+        console.log('🔍 App component available:', typeof App);
 
+        if (typeof App === 'undefined') {
+          console.error('❌ App component not loaded, retrying...');
+          setTimeout(initializeApp, 100);
+          return;
+        }
 
-      // Render the React app
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(React.createElement(App));
+        // Render the React app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(App));
+        console.log('✅ React app rendered');
+      }
+
+      // Start initialization after a short delay to ensure all scripts are loaded
+      setTimeout(initializeApp, 500);
     </script>
   </body>
 </html>
