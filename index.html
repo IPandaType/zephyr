@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Zephyr AR Baby Animation App" />
+    <title>Zephyr AR App</title>
+    
+    <!-- A-Frame and MindAR Scripts -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.css" />
+    
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+      
+      /* AR Controls */
+      .ar-controls {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        display: block;
+        transition: opacity 0.3s ease;
+      }
+
+      .ar-message {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .control-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .control-btn {
+        margin: 3px;
+        padding: 6px 10px;
+        border: none;
+        border-radius: 4px;
+        background: #f0f0f0;
+        color: #333;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 60px;
+      }
+
+      .control-btn:hover {
+        background: #e0e0e0;
+        transform: translateY(-1px);
+      }
+
+      .control-btn:active {
+        transform: translateY(0);
+        background: #d0d0d0;
+      }
+
+      /* A-Frame Scene Styling */
+      a-scene {
+        width: 100vw !important;
+        height: 100vh !important;
+      }
+
+      /* Hide A-Frame UI elements */
+      .a-enter-vr {
+        display: none !important;
+      }
+
+      .a-orientation-modal {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- AR Controls -->
+    <div class="ar-controls">
+      <span class="ar-message" id="ar-message">Point your camera at the target image...</span>
+      <div class="control-buttons">
+        <button onclick="scaleAnimation(0.7)" class="control-btn">Small</button>
+        <button onclick="scaleAnimation(1.0)" class="control-btn">Medium</button>
+        <button onclick="scaleAnimation(1.25)" class="control-btn">Large</button>
+        <button onclick="scaleAnimation(1.50)" class="control-btn">Extra Large</button>
+      </div>
+    </div>
+
+    <!-- A-Frame AR Scene -->
+    <a-scene
+      mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: true"
+    >
+      <a-assets>
+        <video
+          id="baby-video"
+          src="baby2.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+          crossorigin="anonymous"
+          style="object-fit: cover;"
+        ></video>
+        <img id="target-image" src="bayko.jpeg" />
+      </a-assets>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity mindar-image-target="targetIndex: 0">
+        <a-plane
+          id="baby-animation-plane"
+          src="#baby-video"
+          position="0 -0.3 0"
+          width="1.0"
+          height="1.0"
+          rotation="-15 0 0"
+          material="transparent: true; shader: flat"
+        ></a-plane>
+      </a-entity>
+    </a-scene>
+
+    <script>
+      const messageSpan = document.getElementById('ar-message');
+
+      // Function to adjust animation scale
+      function scaleAnimation(newScale) {
+        const animationPlane = document.querySelector('#baby-animation-plane');
+        if (animationPlane) {
+          animationPlane.setAttribute('width', newScale);
+          animationPlane.setAttribute('height', newScale);
+          messageSpan.textContent = `Animation scaled to ${newScale}. Point camera at target.`;
+        }
+      }
+
+      // Initialize AR functionality
+      document.addEventListener('DOMContentLoaded', () => {
+        // Listen for camera events
+        window.addEventListener('camera-init', () => {
+          messageSpan.textContent = 'Camera ready! Point at the target image.';
+        });
+
+        window.addEventListener('camera-error', () => {
+          messageSpan.textContent = 'Camera access denied. Please allow camera access.';
+        });
+
+        // Listen for AR target found/lost events
+        setTimeout(() => {
+          const targetEntity = document.querySelector('[mindar-image-target]');
+          if (targetEntity) {
+            targetEntity.addEventListener('targetFound', () => {
+              messageSpan.textContent = '🎯 Target found! Look for the baby animation!';
+            });
+
+            targetEntity.addEventListener('targetLost', () => {
+              messageSpan.textContent = '❌ Target lost. Point camera at the image again.';
+            });
+          }
+        }, 1000);
+
+        // Enhanced video loading and smooth playback
+        const babyVideo = document.querySelector('#baby-video');
+        if (babyVideo) {
+          babyVideo.addEventListener('loadeddata', () => {
+            messageSpan.textContent = 'Video animation loaded! Point camera at target.';
+            babyVideo.currentTime = 0;
+            babyVideo.playbackRate = 1.0;
+          });
+
+          babyVideo.addEventListener('error', () => {
+            messageSpan.textContent = 'Video failed to load.';
+          });
+
+          babyVideo.addEventListener('canplay', () => {
+            babyVideo.play();
+          });
+
+          babyVideo.addEventListener('ended', () => {
+            babyVideo.currentTime = 0;
+            babyVideo.play();
+          });
+
+          babyVideo.addEventListener('pause', () => {
+            if (!babyVideo.ended) {
+              babyVideo.play();
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
