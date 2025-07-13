@@ -17,9 +17,6 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Styled Components -->
-    <script src="https://unpkg.com/styled-components@5.3.11/dist/styled-components.min.js"></script>
     
     <style>
       /* Base styles only - styled-components handle the rest */
@@ -45,6 +42,34 @@
         margin: 0;
         padding: 0;
         overflow: hidden;
+      }
+
+      /* Enhanced button hover effects */
+      button:hover {
+        background: linear-gradient(145deg, #e8e8e8, #ddd) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+      }
+
+      button:active {
+        transform: translateY(0) !important;
+        background: linear-gradient(145deg, #ddd, #d0d0d0) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+      }
+
+      /* A-Frame scene styling */
+      a-scene {
+        width: 100vw !important;
+        height: 100vh !important;
+      }
+
+      /* Hide A-Frame UI elements */
+      .a-enter-vr {
+        display: none !important;
+      }
+
+      .a-orientation-modal {
+        display: none !important;
       }
     </style>
   </head>
