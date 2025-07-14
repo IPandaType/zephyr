@@ -3,7 +3,7 @@ const { useState, useEffect, useRef } = React;
 // Enhanced: Improved stability and smooth tracking - v1.2
 
 function App() {
-  const [arMessage, setArMessage] = useState('Point your camera at the target image...');
+  const [arMessage, setArMessage] = useState('Look for animated characters...');
   const [showControls, setShowControls] = useState(true);
   const [foundCharacters, setFoundCharacters] = useState({ bear: false, raccoon: false, baby: false });
   const sceneRef = useRef(null);
@@ -22,7 +22,7 @@ function App() {
 
         // Enhanced video loading and smooth playback
         babyVideo.addEventListener('loadeddata', () => {
-          setArMessage('Video animation loaded! Point camera at target.');
+          setArMessage('Look around to find animated characters!!');
           babyVideo.currentTime = 0;
           babyVideo.playbackRate = 1.0;
 
@@ -72,7 +72,7 @@ function App() {
 
       // Listen for camera events
       window.addEventListener('camera-init', () => {
-        setArMessage('Camera ready! Point at the target image.');
+        setArMessage('Camera ready! Look for animated characters');
         setTimeout(() => setShowControls(false), 5000);
       });
 
@@ -127,7 +127,7 @@ function App() {
 
         targetEntity.addEventListener('targetLost', () => {
           console.log('❌ Baby target lost');
-          setArMessage('❌ Target lost. Point camera at the image again.');
+          setArMessage('Keep looking for animated characters!');
           setShowControls(true);
         });
       }
@@ -144,7 +144,7 @@ function App() {
     if (animationPlane) {
       animationPlane.setAttribute('width', newScale);
       animationPlane.setAttribute('height', newScale);
-      setArMessage(`Animation scaled to ${newScale}. Point camera at target.`);
+      setArMessage(`Scaled to ${newScale}`);
     }
   };
 
