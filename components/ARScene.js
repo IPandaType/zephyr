@@ -14,7 +14,7 @@ function ARScene({ sceneRef, videoRef }) {
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp, alpha: true',
     'vr-mode-ui': 'enabled: false',
-    'device-orientation-permission-ui': 'enabled: true'
+    'device-orientation-permission-ui': 'enabled: false'
   },
     React.createElement(ARAssets, { videoRef }),
     React.createElement(ARCamera),

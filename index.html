@@ -89,6 +89,16 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
       }
 
+      /* Hide device motion permission dialogs */
+      .a-dialog-container, .a-dialog, [data-aframe-dialog], .aframe-dialog {
+        display: none !important;
+      }
+
+      /* Hide A-Frame VR/device orientation UI */
+      .a-enter-vr, .a-orientation-modal {
+        display: none !important;
+      }
+
       /* A-Frame scene styling with performance optimizations */
       a-scene {
         width: 100vw !important;
@@ -128,9 +138,9 @@
 
     <!-- Load Styled Components and React Components -->
     <script type="text/babel" src="components/StyledComponents.js?v=3.0"></script>
-    <script type="text/babel" src="components/ARScene.js?v=6.0"></script>
-    <script type="text/babel" src="components/ARControls.js?v=6.0"></script>
-    <script type="text/babel" src="components/App.js?v=6.0"></script>
+    <script type="text/babel" src="components/ARScene.js?v=6.1"></script>
+    <script type="text/babel" src="components/ARControls.js?v=6.1"></script>
+    <script type="text/babel" src="components/App.js?v=6.1"></script>
 
     <script type="text/babel">
       // Wait for all components to load before rendering
