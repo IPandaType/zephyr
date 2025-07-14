@@ -91,6 +91,20 @@ function App() {
               // Baby target (bayko.jpeg)
               setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
               setFoundCharacters(prev => ({ ...prev, baby: true }));
+
+              // Ensure video plays when baby target is found
+              const video = document.querySelector('#baby-video');
+              if (video) {
+                video.play().then(() => {
+                  console.log('📹 Baby video started playing');
+                }).catch((error) => {
+                  console.log('📹 Baby video play failed:', error);
+                  // Try to play again after user interaction
+                  setTimeout(() => {
+                    video.play().catch(e => console.log('📹 Second play attempt failed:', e));
+                  }, 1000);
+                });
+              }
             } else if (index === 1) {
               // Raccoon target (lefthand.jpeg)
               setArMessage('🦝 You found the Raccoon on your left hand! Show your right hand ✋ for the bear!');

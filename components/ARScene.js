@@ -44,7 +44,9 @@ function ARAssets({ videoRef }) {
       style: { objectFit: 'cover' },
       'webkit-playsinline': 'true',
       'playsinline': 'true',
-      'data-object-fit': 'cover'
+      'data-object-fit': 'cover',
+      controls: false,
+      defaultMuted: true
     }),
     React.createElement('img', {
       id: 'baby-target-image',
