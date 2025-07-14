@@ -39,15 +39,21 @@ function ARAssets({ videoRef }) {
       loop: true,
       muted: true,
       playsInline: true,
-      preload: 'metadata',
+      preload: 'auto',
       crossOrigin: 'anonymous',
-      style: { objectFit: 'cover' },
+      style: { objectFit: 'cover', display: 'none' },
       'webkit-playsinline': 'true',
       'playsinline': 'true',
       'data-object-fit': 'cover',
       controls: false,
       defaultMuted: true,
-      volume: 0
+      volume: 0,
+      onCanPlay: () => {
+        const video = document.querySelector('#baby-video');
+        if (video) {
+          video.play().catch(e => console.log('Auto-play prevented:', e));
+        }
+      }
     }),
     React.createElement('img', {
       id: 'baby-target-image',
