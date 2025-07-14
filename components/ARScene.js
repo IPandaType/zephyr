@@ -10,7 +10,7 @@ function ARScene({ sceneRef, videoRef }) {
   // Multi-target scene with optimized smooth tracking
   const sceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: assets/targets.mind; autoStart: true; filterMinCF: 0.001; filterBeta: 0.01; warmupTolerance: 2; missTolerance: 10; showStats: false',
+    'mindar-image': 'imageTargetSrc: assets/targets.mind;  uiError:no; uiLoading:no; uiScanning:no; autoStart: true; filterMinCF: 0.001; filterBeta: 0.01; warmupTolerance: 2; missTolerance: 10; showStats: false',
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp, alpha: true',
     'vr-mode-ui': 'enabled: false',
