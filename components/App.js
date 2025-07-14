@@ -73,7 +73,7 @@ function App() {
       // Listen for camera events
       window.addEventListener('camera-init', () => {
         setArMessage('Camera ready! Look for animated characters');
-        setTimeout(() => setShowControls(false), 5000);
+        // Don't hide controls automatically - let target events control them
       });
 
       window.addEventListener('camera-error', () => {
@@ -88,47 +88,41 @@ function App() {
           setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
           setShowControls(true);
 
-          // Force video to play when baby target is found
-          setTimeout(() => {
-            const video = document.querySelector('#baby-video');
-            if (video) {
-              console.log('📹 Video element found, current state:', {
-                paused: video.paused,
-                currentTime: video.currentTime,
-                readyState: video.readyState
-              });
+          // Simple, direct video play approach
+          const video = document.querySelector('#baby-video');
+          if (video) {
+            console.log('📹 Attempting to play baby video...');
 
-              // Reset and play video
-              video.currentTime = 0;
-              video.muted = true; // Ensure muted for autoplay
+            // Ensure video is properly configured for autoplay
+            video.muted = true;
+            video.volume = 0;
+            video.currentTime = 0;
 
-              video.play().then(() => {
-                console.log('📹 Baby video started playing successfully!');
+            // Try to play immediately
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+              playPromise.then(() => {
+                console.log('📹 Baby video is playing!');
               }).catch((error) => {
-                console.log('📹 Baby video play failed:', error);
-
-                // Try multiple fallback approaches
-                video.load(); // Reload the video
-                setTimeout(() => {
-                  video.play().catch(e => {
-                    console.log('📹 Fallback play attempt failed:', e);
-                    // Last resort - try on next user interaction
-                    document.addEventListener('click', () => {
-                      video.play().catch(finalError => console.log('📹 Final play attempt failed:', finalError));
-                    }, { once: true });
-                  });
-                }, 500);
+                console.log('📹 Autoplay failed, will try on user interaction:', error);
+                // Add click listener to play on user interaction
+                const playOnClick = () => {
+                  video.play().then(() => {
+                    console.log('📹 Video playing after user interaction');
+                  }).catch(e => console.log('📹 Still failed after click:', e));
+                  document.removeEventListener('click', playOnClick);
+                };
+                document.addEventListener('click', playOnClick);
               });
-            } else {
-              console.log('❌ Video element not found');
             }
-          }, 100);
+          } else {
+            console.log('❌ Video element not found');
+          }
         });
 
         targetEntity.addEventListener('targetLost', () => {
           console.log('❌ Baby target lost');
-          setArMessage('Keep looking for animated characters!');
-          setShowControls(true);
+          // Keep the surprise message visible - don't change it when target is lost
         });
       }
 

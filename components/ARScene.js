@@ -10,7 +10,7 @@ function ARScene({ sceneRef, videoRef }) {
   // Multi-target scene with optimized smooth tracking
   const sceneElement = React.createElement('a-scene', {
     ref: sceneRef,
-    'mindar-image': 'imageTargetSrc: assets/targets.mind;  uiError:no; uiLoading:no; uiScanning:no; autoStart: true; filterMinCF: 0.001; filterBeta: 0.01; warmupTolerance: 2; missTolerance: 10; showStats: false',
+    'mindar-image': 'imageTargetSrc: assets/targets.mind; uiError:no; uiLoading:no; uiScanning:no; autoStart: true; filterMinCF: 0.001; filterBeta: 0.01; warmupTolerance: 2; missTolerance: 10; showStats: false',
     'color-space': 'sRGB',
     renderer: 'colorManagement: true, physicallyCorrectLights, antialias: true, precision: highp, alpha: true',
     'vr-mode-ui': 'enabled: false',
@@ -39,7 +39,7 @@ function ARAssets({ videoRef }) {
       loop: true,
       muted: true,
       playsInline: true,
-      preload: 'auto',
+      preload: 'metadata',
       crossOrigin: 'anonymous',
       style: { objectFit: 'cover' },
       'webkit-playsinline': 'true',
@@ -47,13 +47,7 @@ function ARAssets({ videoRef }) {
       'data-object-fit': 'cover',
       controls: false,
       defaultMuted: true,
-      onLoadedData: () => {
-        console.log('📹 Video loaded, attempting to play...');
-        const video = document.querySelector('#baby-video');
-        if (video) {
-          video.play().catch(e => console.log('📹 Initial autoplay blocked:', e));
-        }
-      }
+      volume: 0
     }),
     React.createElement('img', {
       id: 'baby-target-image',
