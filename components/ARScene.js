@@ -46,7 +46,14 @@ function ARAssets({ videoRef }) {
       'playsinline': 'true',
       'data-object-fit': 'cover',
       controls: false,
-      defaultMuted: true
+      defaultMuted: true,
+      onLoadedData: () => {
+        console.log('📹 Video loaded, attempting to play...');
+        const video = document.querySelector('#baby-video');
+        if (video) {
+          video.play().catch(e => console.log('📹 Initial autoplay blocked:', e));
+        }
+      }
     }),
     React.createElement('img', {
       id: 'baby-target-image',
@@ -101,6 +108,8 @@ function VideoPlane() {
     material: 'transparent: true; shader: flat; alphaTest: 0.1; side: double',
     'geometry': 'primitive: plane; width: 1; height: 1; segmentsWidth: 1; segmentsHeight: 1',
     'smooth-transform': 'enabled: true; factor: 0.8',
-    'shadow': 'receive: true'
+    'shadow': 'receive: true',
+    'animation__fadeIn': 'property: material.opacity; from: 0; to: 1; dur: 500; startEvents: targetFound',
+    'animation__play': 'property: rotation; dur: 1; startEvents: targetFound'
   });
 }

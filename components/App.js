@@ -88,19 +88,41 @@ function App() {
           setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
           setShowControls(true);
 
-          // Ensure video plays when baby target is found
-          const video = document.querySelector('#baby-video');
-          if (video) {
-            video.play().then(() => {
-              console.log('📹 Baby video started playing');
-            }).catch((error) => {
-              console.log('📹 Baby video play failed:', error);
-              // Try to play again after user interaction
-              setTimeout(() => {
-                video.play().catch(e => console.log('📹 Second play attempt failed:', e));
-              }, 1000);
-            });
-          }
+          // Force video to play when baby target is found
+          setTimeout(() => {
+            const video = document.querySelector('#baby-video');
+            if (video) {
+              console.log('📹 Video element found, current state:', {
+                paused: video.paused,
+                currentTime: video.currentTime,
+                readyState: video.readyState
+              });
+
+              // Reset and play video
+              video.currentTime = 0;
+              video.muted = true; // Ensure muted for autoplay
+
+              video.play().then(() => {
+                console.log('📹 Baby video started playing successfully!');
+              }).catch((error) => {
+                console.log('📹 Baby video play failed:', error);
+
+                // Try multiple fallback approaches
+                video.load(); // Reload the video
+                setTimeout(() => {
+                  video.play().catch(e => {
+                    console.log('📹 Fallback play attempt failed:', e);
+                    // Last resort - try on next user interaction
+                    document.addEventListener('click', () => {
+                      video.play().catch(finalError => console.log('📹 Final play attempt failed:', finalError));
+                    }, { once: true });
+                  });
+                }, 500);
+              });
+            } else {
+              console.log('❌ Video element not found');
+            }
+          }, 100);
         });
 
         targetEntity.addEventListener('targetLost', () => {
