@@ -42,19 +42,46 @@ function ARAssets({ videoRef }) {
       preload: 'auto',
       crossOrigin: 'anonymous',
       style: {
-        position: 'absolute',
-        top: '-9999px',
-        left: '-9999px',
+        position: 'fixed',
+        top: '-200px',
+        left: '-200px',
         width: '1px',
         height: '1px',
         opacity: 0,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        zIndex: -1000,
+        visibility: 'hidden'
       },
       'webkit-playsinline': 'true',
       'playsinline': 'true',
       controls: false,
       defaultMuted: true,
-      volume: 0
+      volume: 0,
+      onLoadedMetadata: () => {
+        console.log('📹 Video metadata loaded, forcing play...');
+        const video = document.querySelector('#baby-video');
+        if (video) {
+          video.muted = true;
+          video.volume = 0;
+          video.currentTime = 0;
+          video.play().then(() => {
+            console.log('📹 Video auto-playing successfully!');
+          }).catch(e => {
+            console.log('📹 Auto-play blocked, will retry:', e);
+            setTimeout(() => {
+              video.play().catch(err => console.log('📹 Retry failed:', err));
+            }, 1000);
+          });
+        }
+      },
+      onPlay: () => console.log('📹 Video started playing'),
+      onPause: () => {
+        console.log('📹 Video paused, restarting...');
+        const video = document.querySelector('#baby-video');
+        if (video) {
+          video.play().catch(e => console.log('📹 Restart failed:', e));
+        }
+      }
     }),
     React.createElement('img', {
       id: 'baby-target-image',

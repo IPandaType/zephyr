@@ -88,36 +88,46 @@ function App() {
           setArMessage('👶 SURPRISE! Mark your calendars! My debut is January 2026 📅👣');
           setShowControls(true);
 
-          // Simple, direct video play approach
-          const video = document.querySelector('#baby-video');
-          if (video) {
-            console.log('📹 Attempting to play baby video...');
+          // AGGRESSIVE video play approach - force it to work!
+          setTimeout(() => {
+            const video = document.querySelector('#baby-video');
+            if (video) {
+              console.log('📹 FORCING baby video to play...');
 
-            // Ensure video is properly configured for autoplay
-            video.muted = true;
-            video.volume = 0;
-            video.currentTime = 0;
+              // Force all video properties for autoplay
+              video.muted = true;
+              video.volume = 0;
+              video.currentTime = 0;
+              video.autoplay = true;
+              video.loop = true;
 
-            // Try to play immediately
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-              playPromise.then(() => {
-                console.log('📹 Baby video is playing!');
-              }).catch((error) => {
-                console.log('📹 Autoplay failed, will try on user interaction:', error);
-                // Add click listener to play on user interaction
-                const playOnClick = () => {
-                  video.play().then(() => {
-                    console.log('📹 Video playing after user interaction');
-                  }).catch(e => console.log('📹 Still failed after click:', e));
-                  document.removeEventListener('click', playOnClick);
-                };
-                document.addEventListener('click', playOnClick);
-              });
+              // Multiple play attempts
+              const forcePlay = () => {
+                video.play().then(() => {
+                  console.log('📹 SUCCESS: Baby video is playing!');
+                }).catch((error) => {
+                  console.log('📹 Play attempt failed, retrying...', error);
+                  setTimeout(forcePlay, 500); // Keep trying every 500ms
+                });
+              };
+
+              // Start forcing play
+              forcePlay();
+
+              // Also try on any user interaction
+              const playOnInteraction = () => {
+                video.play().then(() => {
+                  console.log('📹 Video playing after user interaction');
+                }).catch(e => console.log('📹 Still failed after interaction:', e));
+              };
+
+              document.addEventListener('click', playOnInteraction);
+              document.addEventListener('touchstart', playOnInteraction);
+
+            } else {
+              console.log('❌ Video element not found');
             }
-          } else {
-            console.log('❌ Video element not found');
-          }
+          }, 200);
         });
 
         targetEntity.addEventListener('targetLost', () => {

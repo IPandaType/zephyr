@@ -99,6 +99,32 @@
         display: none !important;
       }
 
+      /* Force hide all video elements and controls */
+      video, video::-webkit-media-controls, video::-webkit-media-controls-panel {
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: fixed !important;
+        top: -1000px !important;
+        left: -1000px !important;
+        width: 1px !important;
+        height: 1px !important;
+        z-index: -9999 !important;
+        pointer-events: none !important;
+      }
+
+      /* Specifically target the baby video */
+      #baby-video {
+        visibility: hidden !important;
+        opacity: 0 !important;
+        position: fixed !important;
+        top: -1000px !important;
+        left: -1000px !important;
+        width: 1px !important;
+        height: 1px !important;
+        z-index: -9999 !important;
+        pointer-events: none !important;
+      }
+
       /* A-Frame scene styling with performance optimizations */
       a-scene {
         width: 100vw !important;
@@ -138,9 +164,9 @@
 
     <!-- Load Styled Components and React Components -->
     <script type="text/babel" src="components/StyledComponents.js?v=3.0"></script>
-    <script type="text/babel" src="components/ARScene.js?v=6.7"></script>
-    <script type="text/babel" src="components/ARControls.js?v=6.5"></script>
-    <script type="text/babel" src="components/App.js?v=6.5"></script>
+    <script type="text/babel" src="components/ARScene.js?v=7.0"></script>
+    <script type="text/babel" src="components/ARControls.js?v=7.0"></script>
+    <script type="text/babel" src="components/App.js?v=7.0"></script>
 
     <script type="text/babel">
       // Wait for all components to load before rendering
